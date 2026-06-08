@@ -1,4 +1,5 @@
-// accordion supprimé
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   Check, ShieldCheck, Truck, Gift, Star, BadgeCheck,
   Sparkles, Clock, MessageCircle, CheckCircle2
