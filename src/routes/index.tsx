@@ -64,7 +64,7 @@ async function sendCAPI(eventName: string, orderData: {
   }
 }
 
-function LandingPage() {
+export default function LandingPage() {
   const [color, setColor] = useState<ColorName>("Or");
   const [submitting, setSubmitting] = useState(false);
   const [orderDone, setOrderDone] = useState(false);
