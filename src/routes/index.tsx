@@ -353,20 +353,23 @@ function LandingPage() {
         <h2 className="text-3xl sm:text-4xl text-center font-semibold">
           Questions <span className="text-gold-gradient italic">fréquentes</span>
         </h2>
-        <Accordion type="single" collapsible className="mt-8">
-          {[
-            { q: "Est-ce que c'est du vrai acier inoxydable ?", a: "Oui, 100 %. Acier inoxydable 316L, hypoallergénique et résistant à la rouille." },
-            { q: "Est-ce que la gravure s'efface avec le temps ?", a: "Non. Gravure laser en profondeur dans le métal. Elle ne s'efface pas." },
-            { q: "Combien de temps pour la livraison au Mali ?", a: "Bamako : 24-48h. Autres villes : 2-4 jours ouvrés." },
-            { q: "Puis-je commander pour offrir en cadeau ?", a: "Absolument. Livré dans un écrin élégant prêt à offrir." },
-            { q: "Le paiement est-il sécurisé ?", a: "Vous payez à la livraison, en espèces, après vérification. Aucun risque." },
-          ].map((item, i) => (
-            <AccordionItem key={i} value={`q-${i}`} className="border-border/60">
-              <AccordionTrigger className="text-left text-base sm:text-lg">{item.q}</AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed">{item.a}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <div className="mt-8 space-y-3">
+  {[
+    { q: "Est-ce que c'est du vrai acier inoxydable ?", a: "Oui, 100 %. Acier inoxydable 316L, hypoallergénique et résistant à la rouille." },
+    { q: "Est-ce que la gravure s'efface avec le temps ?", a: "Non. Gravure laser en profondeur dans le métal. Elle ne s'efface pas." },
+    { q: "Combien de temps pour la livraison au Mali ?", a: "Bamako : 24-48h. Autres villes : 2-4 jours ouvrés." },
+    { q: "Puis-je commander pour offrir en cadeau ?", a: "Absolument. Livré dans un écrin élégant prêt à offrir." },
+    { q: "Le paiement est-il sécurisé ?", a: "Vous payez à la livraison, en espèces, après vérification. Aucun risque." },
+  ].map((item, i) => (
+    <details key={i} className="border border-border/60 rounded-lg p-4 cursor-pointer">
+      <summary className="text-base sm:text-lg font-medium list-none flex justify-between items-center">
+        {item.q}
+        <span className="text-gold ml-2">+</span>
+      </summary>
+      <p className="mt-3 text-muted-foreground leading-relaxed">{item.a}</p>
+    </details>
+  ))}
+</div>
       </section>
 
       <UrgencySection />
