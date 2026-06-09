@@ -1214,23 +1214,40 @@ _Commande reçue via aynour.vercel.app_
 }
 
   // ── CAPI META ──
-  async function sendCAPI(eventName, phone, fullName, value) {
-    try {
-      const res = await fetch(`${SUPABASE_URL}/functions/v1/meta-capi`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_KEY}`
+  async function sendCAPI(eventName, phone, fullName, value, eventId) {
+    const eventId = 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+    window._lastEventId = eventId;
+
+    await fetch(`${SUPABASE_URL}/functions/v1/meta-capi`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      },
+      body: JSON.stringify({
+        event_name: eventName,
+        event_id: eventId,
+        event_time: Math.floor(Date.now() / 1000),
+        event_source_url: window.location.href,
+        user_data: {
+          phone: phone,
+          full_name: fullName,
+          client_ip_address: null,
+          client_user_agent: navigator.userAgent,
+          fbp: getCookie('_fbp'),
+          fbc: getCookie('_fbc'),
         },
-        body: JSON.stringify({
-          event_name: eventName,
-          event_time: Math.floor(Date.now() / 1000),
-          user_data: { phone, full_name: fullName },
-          custom_data: { value, currency: 'XOF', content_name: 'Bracelet Ayat Al-Kursi' }
-        })
-      });
-    } catch(e) { console.warn('CAPI:', e); }
-  }
+        custom_data: {
+          value: value,
+          currency: 'XOF',
+          content_name: 'Bracelet Ayat Al-Kursi',
+          content_type: 'product',
+          num_items: quantity,
+        }
+      })
+    });
+  } catch(e) { console.warn('CAPI:', e); }
+}
 
   // ── PIXEL TRACK ──
   function track(event, data) {
@@ -1311,6 +1328,10 @@ function changeQty(delta) {
     };
   }
 
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
   // ── VIEW CONTENT ──
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
@@ -1363,8 +1384,16 @@ await sendTelegram(full_name, phone, address, color, quantity, quantity * 7000);
 
       // Pixel Purchase
       const totalValue = quantity * 7000;
-track('Purchase', { value: totalValue, currency: 'XOF', content_name: 'Bracelet Ayat Al-Kursi' });
-await sendCAPI('Purchase', phone, full_name, totalValue);
+const eventId = 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+track('Purchase', {
+  value: totalValue,
+  currency: 'XOF',
+  content_name: 'Bracelet Ayat Al-Kursi',
+  content_type: 'product',
+  num_items: quantity,
+  eventID: eventId
+});
+await sendCAPI('Purchase', phone, full_name, totalValue, eventId);
 
       // CAPI
       await sendCAPI('Purchase', phone, full_name, 7000);
