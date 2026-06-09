@@ -1157,6 +1157,7 @@ z-index: 99;
     </button>
   </div>
 </div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -1215,7 +1216,7 @@ _Commande reçue via aynour.vercel.app_
 
   // ── CAPI META ──
   async function sendCAPI(eventName, phone, fullName, value, eventId) {
-    const eventId = 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+  try {
     window._lastEventId = eventId;
 
     await fetch(`${SUPABASE_URL}/functions/v1/meta-capi`, {
@@ -1393,10 +1394,9 @@ track('Purchase', {
   num_items: quantity,
   eventID: eventId
 });
-await sendCAPI('Purchase', phone, full_name, totalValue, eventId);
 
       // CAPI
-      await sendCAPI('Purchase', phone, full_name, 7000);
+      await sendCAPI('Purchase', phone, full_name, totalValue, eventId);
 
       // Confirmation
       document.getElementById('main-content').style.display = 'none';
