@@ -603,7 +603,7 @@ z-index: 99;
   color: var(--black);
   font-family: var(--font);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 18px;
@@ -1051,9 +1051,23 @@ z-index: 99;
   <option value="Or">Or</option>
   <option value="Noir">Noir</option>
 </select>
+<div class="form-group">
+  <label class="form-label">Quantité</label>
+  <div style="display:flex;align-items:center;gap:16px">
+    <button type="button" onclick="changeQty(-1)" style="width:40px;height:40px;border-radius:50%;background:var(--gray-2);border:1px solid var(--gray-3);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+    <span id="qty-display" style="font-family:var(--font-display);font-size:1.4rem;font-weight:300;min-width:24px;text-align:center">1</span>
+    <button type="button" onclick="changeQty(1)" style="width:40px;height:40px;border-radius:50%;background:var(--gray-2);border:1px solid var(--gray-3);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+    <span style="color:var(--text-muted);font-size:13px">× 7 000 FCFA</span>
+  </div>
+  <div style="margin-top:12px;padding:14px 16px;background:var(--gray);border-radius:12px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:10px;color:var(--text-muted);letter-spacing:0.05em;text-transform:uppercase">Total</span>
+    <span id="total-display" style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold);font-weight:400">7 000 FCFA</span>
+  </div>
+  <input type="hidden" name="quantity" id="qty-input" value="1" />
+</div>
           </div>
           <button type="submit" class="submit-btn" id="submit-btn">
-            Commander maintenant — 7 000 FCFA à la livraison
+            Finaliser la commande
           </button>
           <p class="form-note">🔒 Paiement uniquement à la réception de votre colis</p>
           <div class="form-guarantee">
@@ -1169,6 +1183,35 @@ z-index: 99;
     });
     if (!res.ok) throw new Error('Supabase error');
   }
+const TELEGRAM_TOKEN = 'AAGdYcU7rWa1rJX4Nq5auspEirw5pbFeLqU';
+const TELEGRAM_CHAT_ID = '8977987451';
+
+async function sendTelegram(full_name, phone, address, color, quantity, total) {
+  const msg = `
+🛍 *Nouvelle commande — Aynour*
+
+👤 *Nom :* ${full_name}
+📞 *Téléphone :* +223${phone}
+📍 *Adresse :* ${address}
+🎨 *Couleur :* ${color}
+📦 *Quantité :* ${quantity}
+💰 *Total :* ${total.toLocaleString('fr-FR')} FCFA
+
+_Commande reçue via aynour.vercel.app_
+  `.trim();
+
+  try {
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: msg,
+        parse_mode: 'Markdown'
+      })
+    });
+  } catch(e) { console.warn('Telegram:', e); }
+}
 
   // ── CAPI META ──
   async function sendCAPI(eventName, phone, fullName, value) {
@@ -1226,6 +1269,15 @@ z-index: 99;
     document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
     if (!isOpen) item.classList.add('open');
   }
+  let quantity = 1;
+function changeQty(delta) {
+  quantity = Math.max(1, Math.min(20, quantity + delta));
+  document.getElementById('qty-display').textContent = quantity;
+  document.getElementById('qty-input').value = quantity;
+  const total = (quantity * 7000).toLocaleString('fr-FR');
+  document.getElementById('total-display').textContent = total + ' FCFA';
+  document.getElementById('submit-btn').textContent = 'Commander — ' + total + ' FCFA à la livraison';
+}
 
   // ── COUNTDOWN ──
   (function() {
@@ -1301,12 +1353,18 @@ z-index: 99;
 
     try {
       await insertOrder({
-        full_name, phone, address, color,
-        ...getUTM()
-      });
+  full_name, phone, address, color,
+  quantity: quantity,
+  total_price: quantity * 7000,
+  ...getUTM()
+});
+
+await sendTelegram(full_name, phone, address, color, quantity, quantity * 7000);
 
       // Pixel Purchase
-      track('Purchase', { value: 7000, currency: 'XOF', content_name: 'Bracelet Ayat Al-Kursi' });
+      const totalValue = quantity * 7000;
+track('Purchase', { value: totalValue, currency: 'XOF', content_name: 'Bracelet Ayat Al-Kursi' });
+await sendCAPI('Purchase', phone, full_name, totalValue);
 
       // CAPI
       await sendCAPI('Purchase', phone, full_name, 7000);
