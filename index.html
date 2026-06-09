@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aynour — Bracelet Ayat Al-Kursi</title>
+  <meta name="description" content="Bracelet Ayat Al-Kursi en acier inoxydable 316L. Gravure Coran authentique. Paiement à la livraison à Bamako." />
+  <meta property="og:title" content="Aynour — Bracelet Ayat Al-Kursi" />
+  <meta property="og:description" content="Portez la parole d'Allah sur votre poignet. Livraison gratuite à Bamako." />
+  <meta property="og:image" content="https://ae-pic-a1.aliexpress-media.com/kf/Sa844f2f582de4a3c9d59154b90bd64c7X.jpg_960x960q75.jpg_.avif" />
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1585378886529455');
+    fbq('track', 'PageView');
+  </script>
+
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #080808;
+      --white: #f5f5f0;
+      --gold: #c9a84c;
+      --gold-light: #e8c96d;
+      --gold-dark: #a07830;
+      --gray: #1a1a1a;
+      --gray-2: #2a2a2a;
+      --gray-3: #3a3a3a;
+      --text-muted: #888;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+--font: 'Inter', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── TYPOGRAPHY ── */
+    .text-gold { color: var(--gold); }
+    .text-muted { color: var(--text-muted); }
+    .text-center { text-align: center; }
+
+    /* ── GOLD GRADIENT ── */
+    .gold-gradient {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+    }
+    .text-gold-gradient {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── ANNOUNCEMENT BAR ── */
+    .announcement {
+  background: rgba(201,168,76,0.08);
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+  color: var(--gold);
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: relative;
+z-index: 100;
+}
+
+    /* ── NAVBAR ── */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom: 1px solid #1f1f1f;
+      background: rgba(8,8,8,0.95);
+      backdrop-filter: blur(12px);
+      position: sticky;
+top: 0;
+z-index: 99;
+    }
+    .navbar-logo {
+      height: 40px;
+      width: auto;
+    }
+    .navbar-cta {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      color: var(--black);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 22px;
+      border-radius: 100px;
+      letter-spacing: 0.04em;
+      transition: opacity 0.2s;
+    }
+    .navbar-cta:hover { opacity: 0.85; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      padding: 80px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 60% 50%, rgba(201,168,76,0.08), transparent 65%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    .hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin-bottom: 20px;
+}
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 460px;
+      margin-bottom: 36px;
+    }
+    .hero-price {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    .price-current {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--gold);
+  font-family: var(--font-display);
+}
+.price-old {
+  font-size: 1rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+    .price-badge {
+      background: #c0392b;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.05em;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+  color: var(--black);
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 15px 32px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 32px rgba(201,168,76,0.25);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(201,168,76,0.35);
+}
+    .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  padding: 15px 24px;
+  border-radius: 100px;
+  border: 1px solid #2a2a2a;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover {
+  border-color: rgba(201,168,76,0.4);
+  color: var(--gold);
+}
+
+    .hero-trust {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .trust-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── HERO IMAGE ── */
+    .hero-media {
+      position: relative;
+    }
+    .hero-img-wrap {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--gray);
+    }
+    .hero-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .hero-img-wrap:hover img { transform: scale(1.03); }
+    .hero-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(8,8,8,0.4));
+    }
+    .hero-thumbnails {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .thumb {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      flex-shrink: 0;
+    }
+    .thumb.active { border-color: var(--gold); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── VIDEO SECTION ── */
+    .video-section {
+      padding: 100px 60px;
+      text-align: center;
+      position: relative;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+    .video-wrap {
+      max-width: 420px;
+      margin: 0 auto;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--gray-2);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      aspect-ratio: 9/16;
+      position: relative;
+      background: var(--gray);
+    }
+    .video-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 100px 60px;
+      background: var(--gray);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+    .feature-card {
+      background: var(--black);
+      border: 1px solid #1f1f1f;
+      border-radius: 20px;
+      padding: 36px 28px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card:hover {
+      border-color: rgba(201,168,76,0.3);
+      transform: translateY(-4px);
+    }
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+    .feature-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── COLORS ── */
+    .colors-section {
+      padding: 100px 60px;
+    }
+    .colors-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .color-card {
+      border: 2px solid var(--gray-2);
+      border-radius: 16px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .color-card:hover, .color-card.active {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+    .color-swatch {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+    }
+    .color-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials {
+      padding: 100px 60px;
+      background: var(--gray);
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 56px;
+    }
+    .testimonial-card {
+      background: var(--black);
+      border: 1px solid #1f1f1f;
+      border-radius: 20px;
+      padding: 32px;
+      transition: border-color 0.3s;
+    }
+    .testimonial-card:hover { border-color: rgba(201,168,76,0.2); }
+    .stars { color: var(--gold); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+    .testimonial-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #ccc;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .author-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--black);
+      flex-shrink: 0;
+    }
+    .author-name { font-weight: 700; font-size: 14px; }
+    .author-city { font-size: 12px; color: var(--text-muted); }
+
+    /* ── URGENCY ── */
+    .urgency {
+      padding: 80px 60px;
+      text-align: center;
+    }
+    .urgency-card {
+      max-width: 680px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, rgba(201,168,76,0.06), rgba(201,168,76,0.02));
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 28px;
+      padding: 56px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .urgency-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(201,168,76,0.1), transparent 70%);
+      pointer-events: none;
+    }
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .countdown-unit {
+      background: var(--gray);
+      border: 1px solid var(--gray-2);
+      border-radius: 16px;
+      padding: 20px 24px;
+      min-width: 90px;
+    }
+    .countdown-num {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .countdown-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* ── ORDER FORM ── */
+    .order-section {
+      padding: 100px 60px;
+      background: var(--gray);
+    }
+    .order-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .form-card {
+      background: var(--black);
+      border: 1px solid #1f1f1f;
+      border-radius: 28px;
+      padding: 48px;
+      margin-top: 48px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #aaa;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .form-input {
+      width: 100%;
+      background: var(--gray);
+      border: 1px solid var(--gray-3);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: var(--font);
+    }
+    .form-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+    }
+    .form-input::placeholder { color: #555; }
+    .phone-wrap { display: flex; }
+    .phone-prefix {
+      background: var(--gray-2);
+      border: 1px solid var(--gray-3);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .phone-wrap .form-input { border-radius: 0 12px 12px 0; }
+    .form-select {
+      width: 100%;
+      background: var(--gray);
+      border: 1px solid var(--gray-3);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+      color: var(--white);
+      outline: none;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+    .form-select:focus { border-color: var(--gold); }
+    .submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+  color: var(--black);
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 18px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 8px 32px rgba(201,168,76,0.25);
+  margin-top: 8px;
+}
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(201,168,76,0.35);
+}
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+    .form-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 14px;
+    }
+    .form-guarantee {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .guarantee-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .guarantee-icon { color: var(--gold); font-size: 14px; }
+
+    /* ── FAQ ── */
+    .faq-section {
+      padding: 100px 60px;
+    }
+    .faq-list {
+      max-width: 680px;
+      margin: 48px auto 0;
+    }
+    .faq-item {
+      border-bottom: 1px solid #1f1f1f;
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 22px 0;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font);
+    }
+    .faq-icon {
+      color: var(--gold);
+      font-size: 22px;
+      font-weight: 300;
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s;
+    }
+    .faq-item.open .faq-a {
+      max-height: 200px;
+      padding-bottom: 20px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid #1a1a1a;
+      padding: 40px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-copy { font-size: 13px; color: var(--text-muted); }
+
+    /* ── WHATSAPP FLOAT ── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 14px 22px;
+      border-radius: 100px;
+      box-shadow: 0 8px 32px rgba(37,211,102,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .whatsapp-float:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(37,211,102,0.5);
+    }
+    .whatsapp-icon { font-size: 20px; }
+
+    /* ── CONFIRMATION ── */
+    .confirmation {
+      display: none;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .confirmation.show { display: flex; }
+    .confirmation-card {
+      background: var(--gray);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 28px;
+      padding: 56px 40px;
+      max-width: 480px;
+      width: 100%;
+    }
+    .confirmation-icon { font-size: 64px; margin-bottom: 24px; }
+    .confirmation-title { font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+    .confirmation-text { color: var(--text-muted); line-height: 1.7; margin-bottom: 32px; }
+    .confirmation-details {
+      background: var(--black);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+    .confirmation-detail {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-muted);
+      padding: 8px 0;
+    }
+    .confirmation-detail-icon { font-size: 18px; }
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #25D366;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 16px 32px;
+      border-radius: 100px;
+      width: 100%;
+      justify-content: center;
+      transition: opacity 0.2s;
+    }
+    .btn-whatsapp:hover { opacity: 0.9; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-120px);
+      background: var(--gray);
+      border: 1px solid var(--gray-3);
+      color: var(--white);
+      padding: 14px 24px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 9999;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      white-space: nowrap;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: rgba(201,168,76,0.4); color: var(--gold); }
+    .toast.error { border-color: rgba(192,57,43,0.4); color: #e74c3c; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 60px 24px;
+        min-height: auto;
+        gap: 40px;
+      }
+      .hero-content { order: 2; }
+      .hero-media { order: 1; }
+      .navbar { padding: 16px 24px; }
+      .video-section, .features, .colors-section,
+      .testimonials, .urgency, .order-section,
+      .faq-section { padding: 70px 24px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .colors-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .footer { padding: 32px 24px; flex-direction: column; text-align: center; }
+      .form-card { padding: 32px 24px; }
+      .urgency-card { padding: 40px 24px; }
+      .countdown-unit { min-width: 70px; padding: 16px; }
+      .countdown-num { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- ANNOUNCEMENT -->
+<div class="announcement">
+  🚚 Livraison gratuite à Bamako — Paiement à la livraison — Commandez avant 20h
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="#commander" class="navbar-cta" onclick="fbq('track','AddToCart')">Commander →</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">✦ Édition limitée — Stock limité</div>
+      <h1 class="hero-title">
+        Portez la parole<br>
+        <span class="text-gold-gradient">d'Allah</span> sur<br>
+        votre poignet
+      </h1>
+      <p class="hero-subtitle">
+        Bracelet Ayat Al-Kursi en acier inoxydable 316L. Gravure authentique au laser. Élégant, résistant, spirituel.
+      </p>
+
+      <div class="hero-price">
+        <span class="price-current">7 000 FCFA</span>
+        <span class="price-old">14 000 FCFA</span>
+        <span class="price-badge">−50%</span>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#commander" class="btn-primary" onclick="fbq('track','AddToCart',{value:7000,currency:'XOF'})">
+          Commander maintenant
+        </a>
+        <a href="#video" class="btn-secondary">Voir la vidéo</a>
+      </div>
+
+      <div class="hero-trust">
+        <div class="trust-item"><span class="trust-dot"></span> Paiement à la livraison</div>
+        <div class="trust-item"><span class="trust-dot"></span> Livraison gratuite Bamako</div>
+      </div>
+    </div>
+
+    <div class="hero-media">
+      <div class="hero-img-wrap">
+        <img id="hero-main-img"
+          src="https://ae-pic-a1.aliexpress-media.com/kf/Sa844f2f582de4a3c9d59154b90bd64c7X.jpg_960x960q75.jpg_.avif"
+          alt="Bracelet Ayat Al-Kursi"
+          onerror="this.src=this.src.replace('.avif','.jpg')" />
+        <div class="hero-img-overlay"></div>
+      </div>
+      <div class="hero-thumbnails">
+        <div class="thumb active" onclick="switchImg(this,'https://ae-pic-a1.aliexpress-media.com/kf/Sa844f2f582de4a3c9d59154b90bd64c7X.jpg_960x960q75.jpg_.avif')">
+          <img src="https://ae-pic-a1.aliexpress-media.com/kf/Sa844f2f582de4a3c9d59154b90bd64c7X.jpg_960x960q75.jpg_.avif" onerror="this.src=this.src.replace('.avif','.jpg')" />
+        </div>
+        <div class="thumb" onclick="switchImg(this,'https://ae-pic-a1.aliexpress-media.com/kf/Sbd3f4b0b07074bc5b22c597fce5e68d3Z.jpg_960x960q75.jpg_.avif')">
+          <img src="https://ae-pic-a1.aliexpress-media.com/kf/Sbd3f4b0b07074bc5b22c597fce5e68d3Z.jpg_960x960q75.jpg_.avif" onerror="this.src=this.src.replace('.avif','.jpg')" />
+        </div>
+        <div class="thumb" onclick="switchImg(this,'https://ae-pic-a1.aliexpress-media.com/kf/S91535e24632941318d37c89e31b32f32L.jpg_960x960q75.jpg_.avif')">
+          <img src="https://ae-pic-a1.aliexpress-media.com/kf/S91535e24632941318d37c89e31b32f32L.jpg_960x960q75.jpg_.avif" onerror="this.src=this.src.replace('.avif','.jpg')" />
+        </div>
+        <div class="thumb" onclick="switchImg(this,'https://ae-pic-a1.aliexpress-media.com/kf/S4189b3a0e398430db40e177f1b5a1d91B.jpg_960x960q75.jpg_.avif')">
+          <img src="https://ae-pic-a1.aliexpress-media.com/kf/S4189b3a0e398430db40e177f1b5a1d91B.jpg_960x960q75.jpg_.avif" onerror="this.src=this.src.replace('.avif','.jpg')" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="video-section" id="video">
+    <span class="section-label">✦ Découvrez le produit</span>
+    <h2 class="section-title">Voyez-le de <span class="text-gold-gradient">près</span></h2>
+    <p class="section-subtitle">Chaque détail compte. La gravure, le métal, l'élégance — tout est là.</p>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/aiA9i6mgEA8?autoplay=1&mute=1&loop=1&playlist=aiA9i6mgEA8&controls=0&modestbranding=1"
+        allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="text-center">
+      <span class="section-label">✦ Pourquoi Aynour</span>
+      <h2 class="section-title">Un bijou de <span class="text-gold-gradient">foi</span> et de prestige</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+  <div class="feature-icon">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+  </div>
+  <div class="feature-title">Acier inoxydable 316L</div>
+  <div class="feature-desc">Le même acier utilisé en chirurgie. Hypoallergénique, résistant à l'eau et à la rouille. Conçu pour durer toute une vie.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+  </div>
+  <div class="feature-title">Gravure laser authentique</div>
+  <div class="feature-desc">L'Ayat Al-Kursi gravé en profondeur au laser. La calligraphie arabe ne s'efface jamais, même après des années.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+  </div>
+  <div class="feature-title">Écrin élégant inclus</div>
+  <div class="feature-desc">Chaque bracelet est livré dans un écrin soigné. Idéal pour offrir lors de l'Aïd, d'un mariage ou d'une naissance.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  </div>
+  <div class="feature-title">Livraison 24-48h</div>
+  <div class="feature-desc">Livraison rapide à Bamako. Nous vous appelons avant de passer. Paiement uniquement à la réception.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <div class="feature-title">Zéro risque</div>
+  <div class="feature-desc">Vous vérifiez le bracelet avant de payer. Si le produit ne vous convient pas, vous n'êtes pas obligé de l'accepter.</div>
+</div>
+
+<div class="feature-card">
+  <div class="feature-icon">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#080808" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+  </div>
+  <div class="feature-title">Un rappel d'ALLAH</div>
+  <div class="feature-desc">L'Ayat Al-Kursi — le verset du Trône — porté avec vous chaque jour, dans chaque moment de votre vie.</div>
+</div>
+    </div>
+  </section>
+
+  <!-- COLORS -->
+  <section class="colors-section text-center">
+    <span class="section-label">✦ Personnalisation</span>
+    <h2 class="section-title">Choisissez votre <span class="text-gold-gradient">couleur</span></h2>
+    <p class="section-subtitle">4 finitions disponibles pour correspondre à votre style.</p>
+    <div class="colors-grid">
+  <div class="color-card active" onclick="selectColor(this,'Argent')">
+    <div class="color-swatch" style="background:linear-gradient(135deg,#e8e8e8,#a8a8a8,#6b6b6b)"></div>
+    <div class="color-name">Argent</div>
+  </div>
+  <div class="color-card" onclick="selectColor(this,'Or')">
+    <div class="color-swatch" style="background:linear-gradient(135deg,#fbe39a,#d4a44a,#8a6312)"></div>
+    <div class="color-name">Or</div>
+  </div>
+  <div class="color-card" onclick="selectColor(this,'Noir')">
+    <div class="color-swatch" style="background:linear-gradient(135deg,#3a3a3a,#101010,#000);border:1px solid #444"></div>
+    <div class="color-name">Noir</div>
+  </div>
+</div>
+  </section>
+
+  <!-- URGENCY -->
+  <section class="urgency">
+    <div class="urgency-card">
+      <span class="section-label">⚡ Offre limitée</span>
+      <h2 class="section-title" style="margin-top:12px">
+        Il ne reste que <span class="text-gold-gradient">12 bracelets</span>
+      </h2>
+      <p style="color:var(--text-muted);margin-top:8px">L'offre -50% expire dans :</p>
+      <div class="countdown">
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-h">06</div>
+          <div class="countdown-label">Heures</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-m">00</div>
+          <div class="countdown-label">Min</div>
+        </div>
+        <div class="countdown-unit">
+          <div class="countdown-num" id="cd-s">00</div>
+          <div class="countdown-label">Sec</div>
+        </div>
+      </div>
+      <a href="#commander" class="btn-primary" style="display:inline-flex">
+        Je profite de l'offre
+      </a>
+    </div>
+  </section>
+
+  <!-- ORDER FORM -->
+  <section class="order-section" id="commander">
+    <div class="order-wrap">
+      <div class="text-center">
+        <span class="section-label">✦ Commande</span>
+        <h2 class="section-title">Passez votre <span class="text-gold-gradient">commande</span></h2>
+        <p style="color:var(--text-muted);margin-top:8px">Paiement à la livraison — aucune avance requise.</p>
+      </div>
+      <div class="form-card">
+        <form id="order-form" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Nom complet</label>
+            <input class="form-input" name="full_name" required minlength="2" placeholder="Ex. Aminata Koné" autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Téléphone</label>
+            <div class="phone-wrap">
+              <span class="phone-prefix">+223</span>
+              <input class="form-input" name="phone" type="tel" required minlength="6" placeholder="95 01 32 81" inputmode="tel" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Adresse de livraison</label>
+            <textarea class="form-input" name="address" required minlength="4" rows="3" placeholder="Quartier, commune, point de repère" style="resize:none"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Couleur choisie</label>
+            <select class="form-select" name="color" id="color-select">
+  <option value="Argent">Argent</option>
+  <option value="Or">Or</option>
+  <option value="Noir">Noir</option>
+</select>
+          </div>
+          <button type="submit" class="submit-btn" id="submit-btn">
+            Commander maintenant — 7 000 FCFA à la livraison
+          </button>
+          <p class="form-note">🔒 Paiement uniquement à la réception de votre colis</p>
+          <div class="form-guarantee">
+            <div class="guarantee-item"><span class="guarantee-icon">✓</span> Livraison gratuite</div>
+            <div class="guarantee-item"><span class="guarantee-icon">✓</span> Satisfait ou remboursé</div>
+            <div class="guarantee-item"><span class="guarantee-icon">✓</span> Commande sécurisée</div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="text-center">
+      <span class="section-label">✦ FAQ</span>
+      <h2 class="section-title">Questions <span class="text-gold-gradient">fréquentes</span></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Est-ce du vrai acier inoxydable ?<span class="faq-icon">+</span></button>
+        <div class="faq-a">Oui, 100%. Acier inoxydable 316L chirurgical. Hypoallergénique, résistant à l'eau et à la rouille.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">La gravure s'efface-t-elle ?<span class="faq-icon">+</span></button>
+        <div class="faq-a">Non. Gravure laser en profondeur dans le métal. Elle reste nette même après des années d'utilisation quotidienne.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Délai de livraison à Bamako ?<span class="faq-icon">+</span></button>
+        <div class="faq-a">24 à 48 heures à Bamako. Nous vous appelons pour confirmer avant la livraison.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Puis-je l'offrir en cadeau ?<span class="faq-icon">+</span></button>
+        <div class="faq-a">Absolument. Chaque bracelet est livré dans un écrin élégant prêt à offrir — idéal pour l'Aïd, un mariage ou un anniversaire.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Comment fonctionne le paiement ?<span class="faq-icon">+</span></button>
+        <div class="faq-a">Vous payez uniquement à la livraison, en espèces, après avoir reçu et vérifié votre bracelet. Aucune avance, aucun risque.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <img src="https://i.ibb.co/gbQgDTVs/logo.png" alt="Aynour" style="height:32px" onerror="this.style.display='none'" />
+    <p class="footer-copy">© 2025 Aynour — Tous droits réservés.</p>
+  </footer>
+</div>
+
+<!-- CONFIRMATION PAGE -->
+<div class="confirmation" id="confirmation">
+  <div class="confirmation-card">
+    <div class="confirmation-icon">✅</div>
+    <h2 class="confirmation-title">Commande reçue !</h2>
+    <p class="confirmation-text">Merci pour votre commande. Notre équipe vous appellera dans les prochaines heures pour confirmer la livraison.</p>
+    <div class="confirmation-details">
+      <div class="confirmation-detail"><span class="confirmation-detail-icon">📦</span> Livraison à domicile à Bamako</div>
+      <div class="confirmation-detail"><span class="confirmation-detail-icon">💵</span> Paiement à la livraison</div>
+      <div class="confirmation-detail"><span class="confirmation-detail-icon">📞</span> Appel de confirmation sous 24h</div>
+    </div>
+    <a href="https://wa.me/22395013281" class="btn-whatsapp">
+      💬 Nous contacter sur WhatsApp
+    </a>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/22395013281?text=Assalamu%20alaykum%2C%20j%27ai%20une%20question%20sur%20le%20Bracelet%20Ayat%20Al-Kursi." class="whatsapp-float" target="_blank">
+  <span class="whatsapp-icon">💬</span>
+</a>
+<script>
+  // ── SUPABASE CONFIG ──
+  const SUPABASE_URL = 'REMPLACE_PAR_TA_URL_SUPABASE';
+  const SUPABASE_KEY = 'REMPLACE_PAR_TA_CLE_SUPABASE';
+
+  async function insertOrder(data) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Supabase error');
+  }
+
+  // ── CAPI META ──
+  async function sendCAPI(eventName, phone, fullName, value) {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/meta-capi`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        },
+        body: JSON.stringify({
+          event_name: eventName,
+          event_time: Math.floor(Date.now() / 1000),
+          user_data: { phone, full_name: fullName },
+          custom_data: { value, currency: 'XOF', content_name: 'Bracelet Ayat Al-Kursi' }
+        })
+      });
+    } catch(e) { console.warn('CAPI:', e); }
+  }
+
+  // ── PIXEL TRACK ──
+  function track(event, data) {
+    if (typeof fbq === 'function') fbq('track', event, data);
+  }
+
+  // ── TOAST ──
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.className = 'toast', 3500);
+  }
+
+  // ── IMAGE SWITCHER ──
+  function switchImg(thumb, url) {
+    document.getElementById('hero-main-img').src = url;
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+  }
+
+  // ── COLOR SELECTOR ──
+  let selectedColor = 'Argent';
+  function selectColor(card, color) {
+  document.querySelectorAll('.color-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  selectedColor = color;
+  document.getElementById('color-select').value = color;
+  document.getElementById('commander').scrollIntoView({ behavior: 'smooth' });
+}
+
+  // ── FAQ ──
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // ── COUNTDOWN ──
+  (function() {
+    const key = 'aynour_cd';
+    let target = localStorage.getItem(key);
+    if (!target || Number(target) < Date.now()) {
+      target = Date.now() + 6 * 3600 * 1000;
+      localStorage.setItem(key, target);
+    }
+    function update() {
+      const diff = Math.max(0, Number(target) - Date.now());
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('cd-h').textContent = pad(h);
+      document.getElementById('cd-m').textContent = pad(m);
+      document.getElementById('cd-s').textContent = pad(s);
+    }
+    update();
+    setInterval(update, 1000);
+  })();
+
+  // ── UTM ──
+  function getUTM() {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      utm_source: p.get('utm_source') || null,
+      utm_campaign: p.get('utm_campaign') || null,
+      utm_content: p.get('utm_content') || null,
+    };
+  }
+
+  // ── VIEW CONTENT ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        track('ViewContent', { content_name: 'Bracelet Ayat Al-Kursi', value: 7000, currency: 'XOF' });
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  const heroEl = document.querySelector('.hero');
+  if (heroEl) observer.observe(heroEl);
+
+  // ── INITIATE CHECKOUT ──
+  document.getElementById('order-form').addEventListener('focusin', function handler() {
+    track('InitiateCheckout', { value: 7000, currency: 'XOF' });
+    this.removeEventListener('focusin', handler);
+  });
+
+  // ── SUBMIT ──
+  let submitting = false;
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (submitting) return;
+
+    const fd = new FormData(e.target);
+    const full_name = fd.get('full_name').trim();
+    const phone = fd.get('phone').trim();
+    const address = fd.get('address').trim();
+    const color = fd.get('color');
+
+    if (full_name.length < 2 || phone.length < 6 || address.length < 4) {
+      showToast('Veuillez remplir tous les champs.', 'error');
+      return;
+    }
+
+    submitting = true;
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours…';
+
+    try {
+      await insertOrder({
+        full_name, phone, address, color,
+        ...getUTM()
+      });
+
+      // Pixel Purchase
+      track('Purchase', { value: 7000, currency: 'XOF', content_name: 'Bracelet Ayat Al-Kursi' });
+
+      // CAPI
+      await sendCAPI('Purchase', phone, full_name, 7000);
+
+      // Confirmation
+      document.getElementById('main-content').style.display = 'none';
+      document.getElementById('confirmation').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch(err) {
+      console.error(err);
+      showToast('Erreur. Réessayez.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Commander maintenant — 7 000 FCFA à la livraison';
+    } finally {
+      submitting = false;
+    }
+  }
+</script>
+</body>
+</html>
