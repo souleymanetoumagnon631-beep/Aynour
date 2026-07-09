@@ -1,0 +1,25 @@
+name: Supabase keep-alive (multi-projets)
+
+on:
+  schedule:
+    - cron: "0 9 * * 1,4"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping projet 1
+        run: |
+          curl -X GET "${{ secrets.SUPABASE_URL_1 }}/auth/v1/health" \
+          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_1 }}"
+
+      - name: Ping projet 2
+        run: |
+          curl -X GET "${{ secrets.SUPABASE_URL_2 }}/auth/v1/health" \
+          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_2 }}"
+
+      - name: Ping projet 3
+        run: |
+          curl -X GET "${{ secrets.SUPABASE_URL_3 }}/auth/v1/health" \
+          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY_3 }}"
