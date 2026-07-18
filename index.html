@@ -1374,34 +1374,37 @@ function getCookie(name) {
     btn.textContent = 'Envoi en cours…';
 
     try {
-      await insertOrder({
-  full_name, phone, address, color,
-  quantity: quantity,
-  total_price: quantity * 7000,
-  ...getUTM()
-});
-
-await sendTelegram(full_name, phone, address, color, quantity, quantity * 7000);
-
-      // Pixel Purchase
       const totalValue = quantity * 7000;
-const eventId = 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
-track('Purchase', {
-  value: totalValue,
-  currency: 'XOF',
-  content_name: 'Bracelet Ayat Al-Kursi',
-  content_type: 'product',
-  num_items: quantity,
-  eventID: eventId
-});
+      const eventId = 'evt_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
 
-      // CAPI
-      await sendCAPI('Purchase', phone, full_name, totalValue, eventId);
+      // Seul l'enregistrement de la commande est bloquant
+      await insertOrder({
+        full_name, phone, address, color,
+        quantity: quantity,
+        total_price: totalValue,
+        ...getUTM()
+      });
 
-      // Confirmation
+      // Confirmation affichée immédiatement après l'insert
       document.getElementById('main-content').style.display = 'none';
       document.getElementById('confirmation').classList.add('show');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Effets secondaires en arrière-plan, non bloquants
+      sendTelegram(full_name, phone, address, color, quantity, totalValue)
+        .catch(e => console.warn('Telegram:', e));
+
+      track('Purchase', {
+        value: totalValue,
+        currency: 'XOF',
+        content_name: 'Bracelet Ayat Al-Kursi',
+        content_type: 'product',
+        num_items: quantity,
+        eventID: eventId
+      });
+
+      sendCAPI('Purchase', phone, full_name, totalValue, eventId)
+        .catch(e => console.warn('CAPI:', e));
 
     } catch(err) {
       console.error(err);
