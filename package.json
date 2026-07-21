@@ -5,5 +5,7 @@
     "scripts": {
         "dev": "vercel dev"
     },
-    "dependencies": {}
+    "dependencies": {
+        "@vercel/analytics": "^2.0.1"
+    }
 }
