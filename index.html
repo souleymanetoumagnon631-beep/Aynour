@@ -22,7 +22,7 @@
     !function (f, b, e, v, n, t, s) {
       if (f.fbq) return; n = f.fbq = function () {
         n.callMethod ?
-        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
       }; if (!f._fbq) f._fbq = n;
       n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0;
       t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
@@ -1720,6 +1720,14 @@ _Commande reçue via aynour.vercel.app_
           })
         });
 
+        // Sécurité : Vérifier si la réponse est bien du JSON avant de parser
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          const rawText = await res.text();
+          console.error("Réponse non-JSON reçue du serveur :", rawText);
+          throw new Error(`Erreur serveur (${res.status}). Vérifiez que la route /api/create-checkout existe sur Vercel.`);
+        }
+
         const data = await res.json();
 
         if (!res.ok || !data.checkoutUrl) {
@@ -1734,23 +1742,20 @@ _Commande reçue via aynour.vercel.app_
         showToast(err.message || 'Erreur lors de l\'initialisation du paiement.', 'error');
         btn.disabled = false;
         btn.textContent = 'Finaliser la commande';
-      } finally {
-        submitting = false;
       }
-    }
 
-    // ── GESTION DU RETOUR DE PAIEMENT (Succès / Annulation) ──
-    window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
+      // ── GESTION DU RETOUR DE PAIEMENT (Succès / Annulation) ──
+      window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
 
-      if (urlParams.get('payment') === 'success') {
-        document.getElementById('main-content').style.display = 'none';
-        document.getElementById('confirmation').classList.add('show');
-        showToast('Paiement réussi ! Merci pour votre commande.', 'success');
-      } else if (urlParams.get('payment') === 'cancelled') {
-        showToast('Le paiement a été annulé.', 'error');
-      }
-    });
+        if (urlParams.get('payment') === 'success') {
+          document.getElementById('main-content').style.display = 'none';
+          document.getElementById('confirmation').classList.add('show');
+          showToast('Paiement réussi ! Merci pour votre commande.', 'success');
+        } else if (urlParams.get('payment') === 'cancelled') {
+          showToast('Le paiement a été annulé.', 'error');
+        }
+      });
   </script>
 </body>
 

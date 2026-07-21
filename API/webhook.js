@@ -1,7 +1,6 @@
-import crypto from 'crypto';
+const crypto = require('crypto');
 
-// Nécessaire sous Vercel pour lire le raw body et vérifier la signature HMAC
-export const config = {
+module.exports.config = {
     api: {
         bodyParser: false,
     },
@@ -16,7 +15,7 @@ async function getRawBody(req) {
     });
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).send('Méthode non autorisée');
     }
@@ -25,7 +24,6 @@ export default async function handler(req, res) {
         const rawBody = await getRawBody(req);
         const bodyText = rawBody.toString('utf8');
 
-        // 1. Vérification de la signature SenePay
         const signature = req.headers['x-senepay-signature'];
         const expectedSignature = crypto
             .createHmac('sha256', process.env.SENEPAY_WEBHOOK_SECRET)
@@ -39,12 +37,10 @@ export default async function handler(req, res) {
 
         const payload = JSON.parse(bodyText);
 
-        // 2. Traitement de l'événement checkout.session.completed
         if (payload.event === 'checkout.session.completed' && payload.status === 'Complete') {
             const { orderReference, amount, transactionId, customer_phone, metadata } = payload;
 
-            // Inscription dans Supabase
-            const supabaseRes = await fetch(`${process.env.SUPABASE_URL}/rest/v1/orders`, {
+            await fetch(`${process.env.SUPABASE_URL}/rest/v1/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -64,17 +60,12 @@ export default async function handler(req, res) {
                     transaction_id: transactionId
                 })
             });
-
-            if (!supabaseRes.ok) {
-                console.error('Erreur sauvegarde Supabase via Webhook');
-            }
         }
 
-        // Toujours répondre 200 OK
         return res.status(200).json({ received: true });
 
     } catch (err) {
         console.error('Erreur Webhook:', err);
         return res.status(500).send('Erreur Webhook Server');
     }
-}
+};
