@@ -1319,7 +1319,7 @@
           <p style="color:var(--text-muted);margin-top:8px">Paiement à la livraison — aucune avance requise.</p>
         </div>
         <div class="form-card">
-          <form id="order-form" onsubmit="handleSubmit(event)">
+          <form id="orderForm" method="POST" onsubmit="handleSubmit(event)">
             <div class="form-group">
               <label class="form-label">Nom complet</label>
               <input class="form-input" name="full_name" required minlength="2" placeholder="Ex. Aminata Koné"
@@ -1686,28 +1686,38 @@ _Commande reçue via aynour.vercel.app_
 
     // ── SUBMIT AVEC SENEPAY ──
     let submitting = false;
+
     async function handleSubmit(e) {
+      // 1. Empêcher le rechargement de la page et l'apparition des params dans l'URL
       e.preventDefault();
+
       if (submitting) return;
 
-      const fd = new FormData(e.target);
-      const full_name = fd.get('full_name').trim();
-      const phone = fd.get('phone').trim();
-      const address = fd.get('address').trim();
-      const color = fd.get('color');
+      const form = e.target;
+      const btn = document.getElementById('submit-btn');
 
-      if (full_name.length < 2 || phone.length < 6 || address.length < 4) {
-        showToast('Veuillez remplir tous les champs.', 'error');
+      // Récupération des données du formulaire
+      const fd = new FormData(form);
+      const full_name = fd.get('full_name')?.trim();
+      const phone = fd.get('phone')?.trim();
+      const address = fd.get('address')?.trim();
+      const color = fd.get('color');
+      // Récupérer la quantité (ou mettre 1 par défaut)
+      const qtyInput = fd.get('quantity') || (typeof quantity !== 'undefined' ? quantity : 1);
+
+      if (!full_name || !phone || !address) {
+        if (typeof showToast === 'function') showToast('Veuillez remplir tous les champs.', 'error');
         return;
       }
 
       submitting = true;
-      const btn = document.getElementById('submit-btn');
-      btn.disabled = true;
-      btn.textContent = 'Redirection vers le paiement…';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Redirection vers le paiement…';
+      }
 
       try {
-        // 1. Appel de notre API Vercel
+        // 2. Appel de la fonction Serverless Vercel
         const res = await fetch('/api/create-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1716,46 +1726,42 @@ _Commande reçue via aynour.vercel.app_
             phone,
             address,
             color,
-            quantity: quantity
+            quantity: Number(qtyInput)
           })
         });
 
-        // Sécurité : Vérifier si la réponse est bien du JSON avant de parser
+        // Sécurité : vérifier si la réponse est bien du JSON
         const contentType = res.headers.get("content-type");
         if (!contentType || !contentType.includes("application/json")) {
           const rawText = await res.text();
-          console.error("Réponse non-JSON reçue du serveur :", rawText);
-          throw new Error(`Erreur serveur (${res.status}). Vérifiez que la route /api/create-checkout existe sur Vercel.`);
+          console.error("Réponse du serveur :", rawText);
+          throw new Error("Erreur serveur lors de la création du paiement.");
         }
 
         const data = await res.json();
 
         if (!res.ok || !data.checkoutUrl) {
-          throw new Error(data.error || 'Impossible de créer la session de paiement.');
+          throw new Error(data.error || 'Impossible d\'initialiser le paiement SenePay.');
         }
 
-        // 2. Redirection du client vers la page hébergée SenePay
+        // 3. Redirection vers la page de paiement SenePay
         window.location.href = data.checkoutUrl;
 
       } catch (err) {
-        console.error(err);
-        showToast(err.message || 'Erreur lors de l\'initialisation du paiement.', 'error');
-        btn.disabled = false;
-        btn.textContent = 'Finaliser la commande';
-      }
-
-      // ── GESTION DU RETOUR DE PAIEMENT (Succès / Annulation) ──
-      window.addEventListener('DOMContentLoaded', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-
-        if (urlParams.get('payment') === 'success') {
-          document.getElementById('main-content').style.display = 'none';
-          document.getElementById('confirmation').classList.add('show');
-          showToast('Paiement réussi ! Merci pour votre commande.', 'success');
-        } else if (urlParams.get('payment') === 'cancelled') {
-          showToast('Le paiement a été annulé.', 'error');
+        console.error('Erreur submission:', err);
+        if (typeof showToast === 'function') {
+          showToast(err.message || 'Erreur lors du paiement.', 'error');
+        } else {
+          alert(err.message || 'Erreur lors du paiement.');
         }
-      });
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Finaliser la commande';
+        }
+      } finally {
+        submitting = false;
+      }
+    }
   </script>
 </body>
 
