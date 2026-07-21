@@ -1,26 +1,25 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // Accepter uniquement les requêtes POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Méthode non autorisée' });
     }
 
     try {
-        const { full_name, phone, address, color, quantity } = req.body;
+        const { full_name, phone, address, color, quantity } = req.body || {};
 
-        // Calcul du montant total (ex: 7000 FCFA par unité)
         const qty = Number(quantity) || 1;
         const totalAmount = qty * 7000;
 
-        // Clés SenePay définies dans les variables d'environnement Vercel
+        // Clés API SenePay (Variables d'environnement Vercel)
         const apiKey = process.env.SENEPAY_API_KEY;
         const secretKey = process.env.SENEPAY_SECRET_KEY;
 
         if (!apiKey || !secretKey) {
-            console.error("Clés API SenePay manquantes dans les variables d'environnement Vercel.");
+            console.error("Clés API SenePay manquantes dans les variables Vercel.");
             return res.status(500).json({ error: "Configuration serveur incomplète (Clés API manquantes)." });
         }
 
-        // Appel direct à l'API SenePay
+        // Appel direct à SenePay
         const senepayResponse = await fetch('https://api.senepay.com/v1/checkout', {
             method: 'POST',
             headers: {
@@ -45,17 +44,16 @@ export default async function handler(req, res) {
         const senepayData = await senepayResponse.json();
 
         if (!senepayResponse.ok) {
-            console.error('Erreur retournée par SenePay:', senepayData);
+            console.error('Erreur SenePay:', senepayData);
             return res.status(400).json({
                 error: senepayData.message || 'Échec de la création de la session SenePay.'
             });
         }
 
-        // Renvoie l'URL de paiement générée au navigateur
         return res.status(200).json({ checkoutUrl: senepayData.checkout_url || senepayData.url });
 
     } catch (error) {
         console.error('Erreur serveur API:', error);
         return res.status(500).json({ error: 'Erreur interne du serveur lors de la création du paiement.' });
     }
-}
+};
