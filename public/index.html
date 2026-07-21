@@ -1322,25 +1322,25 @@
           <form id="orderForm" onsubmit="handleSubmit(event)">
             <div class="form-group">
               <label class="form-label">Nom complet</label>
-              <input class="form-input" name="full_name" required minlength="2" placeholder="Ex. Aminata Koné"
-                autocomplete="name" />
+              <input class="form-input" id="full_name" name="full_name" required minlength="2"
+                placeholder="Ex. Aminata Koné" autocomplete="name" />
             </div>
             <div class="form-group">
               <label class="form-label">Téléphone</label>
               <div class="phone-wrap">
                 <span class="phone-prefix">+223</span>
-                <input class="form-input" name="phone" type="tel" required minlength="6" placeholder="95 01 32 81"
-                  inputmode="tel" />
+                <input class="form-input" id="phone" name="phone" type="tel" required minlength="6"
+                  placeholder="95 01 32 81" inputmode="tel" />
               </div>
             </div>
             <div class="form-group">
               <label class="form-label">Adresse de livraison</label>
-              <textarea class="form-input" name="address" required minlength="4" rows="3"
+              <textarea class="form-input" id="address" name="address" required minlength="4" rows="3"
                 placeholder="Quartier, commune, point de repère" style="resize:none"></textarea>
             </div>
             <div class="form-group">
               <label class="form-label">Couleur choisie</label>
-              <select class="form-select" name="color" id="color-select">
+              <select class="form-select" name="color" id="color">
                 <option value="Argent">Argent</option>
                 <option value="Or">Or</option>
                 <option value="Noir">Noir</option>
@@ -1364,7 +1364,7 @@
                     style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold);font-weight:400">7 000
                     FCFA</span>
                 </div>
-                <input type="hidden" name="quantity" id="qty-input" value="1" />
+                <input type="hidden" name="quantity" id="quantity" value="1" />
               </div>
             </div>
             <button type="submit" class="submit-btn" id="submit-btn">
@@ -1609,7 +1609,7 @@ _Commande reçue via aynour.vercel.app_
       document.querySelectorAll('.color-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
       selectedColor = color;
-      document.getElementById('color-select').value = color;
+      document.getElementById('color').value = color;
       document.getElementById('commander').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -1624,7 +1624,7 @@ _Commande reçue via aynour.vercel.app_
     function changeQty(delta) {
       quantity = Math.max(1, Math.min(20, quantity + delta));
       document.getElementById('qty-display').textContent = quantity;
-      document.getElementById('qty-input').value = quantity;
+      document.getElementById('quantity').value = quantity;
       const total = (quantity * 7000).toLocaleString('fr-FR');
       document.getElementById('total-display').textContent = total + ' FCFA';
       document.getElementById('submit-btn').textContent = 'Commander — ' + total + ' FCFA à la livraison';
@@ -1688,57 +1688,51 @@ _Commande reçue via aynour.vercel.app_
     }
 
     // ── SUBMIT AVEC SENEPAY ──
+    async function handleSubmit(e) {
+      e.preventDefault();
 
-    document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
-  // 1. OBLIGATOIRE : Empêche le navigateur de poster vers "https://aynour.vercel.app/"
-  e.preventDefault();
-
-  const submitBtn = this.querySelector('button[type="submit"]');
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.innerText = 'Redirection...';
-  }
-
-  // Récupération des données
-  const formData = {
-    full_name: document.getElementById('full_name')?.value || '',
-    phone: document.getElementById('phone')?.value || '',
-    address: document.getElementById('address')?.value || '',
-    color: document.getElementById('color')?.value || '',
-    quantity: document.getElementById('quantity')?.value || 1
-  };
-
-  try {
-    // 2. Envoi de la requête à l'API Serverless
-    const response = await fetch('/api/create-checkout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.checkoutUrl) {
-      // 3. Redirection vers SenePay
-      window.location.href = data.checkoutUrl;
-    } else {
-      alert('Erreur : ' + (data.error || 'Impossible d’initialiser le paiement'));
+      const submitBtn = document.getElementById('submit-btn');
       if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerText = 'Commander';
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Redirection...';
+      }
+
+      const formData = {
+        full_name: document.getElementById('full_name')?.value || '',
+        phone: document.getElementById('phone')?.value || '',
+        address: document.getElementById('address')?.value || '',
+        color: document.getElementById('color')?.value || 'Argent',
+        quantity: parseInt(document.getElementById('quantity')?.value) || 1
+      };
+
+      try {
+        const response = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.checkoutUrl) {
+          fbq('track', 'Purchase', { value: quantity * 7000, currency: 'XOF' });
+          window.location.href = data.checkoutUrl;
+        } else {
+          alert('Erreur : ' + (data.error || 'Impossible d\'initialiser le paiement'));
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Finaliser la commande';
+          }
+        }
+      } catch (err) {
+        console.error('Erreur JS:', err);
+        alert('Une erreur réseau est survenue.');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Finaliser la commande';
+        }
       }
     }
-  } catch (err) {
-    console.error('Erreur JS:', err);
-    alert('Une erreur réseau est survenue.');
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.innerText = 'Commander';
-    }
-  }
-});
 
   </script>
 </body>

@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // 1. Autoriser le CORS (pour éviter les blocages de navigateur)
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -33,6 +33,11 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'Clés API SenePay non configurées sur Vercel' });
         }
 
+        // Déterminer l'URL de base pour les callbacks (supporte Vercel et dev local)
+        const baseUrl = process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : (req.headers.host ? `https://${req.headers.host}` : 'http://localhost:3000');
+
         // 3. Appel à l'API SenePay
         const response = await fetch('https://api.sene-pay.com/api/v1/checkout/sessions', {
             method: 'POST',
@@ -47,8 +52,11 @@ export default async function handler(req, res) {
                 orderReference: orderRef,
                 description: `Bracelet Ayat Al-Kursi (${color}) x${qty}`,
                 country: 'ML',
+                returnUrl: `${baseUrl}/?success=true`,
+                cancelUrl: `${baseUrl}/?cancel=true`,
+                webhookUrl: `${baseUrl}/api/webhook`,
                 metadata: {
-                    customer_name: full_name,
+                    full_name: full_name,
                     phone: phone,
                     address: address,
                     color: color,
@@ -61,9 +69,9 @@ export default async function handler(req, res) {
 
         if (!response.ok) {
             console.error('Erreur SenePay:', data);
-            return res.status(response.status).json({
-                error: data.message || 'Erreur lors de la création de la session SenePay'
-            });
+            // Fallback : la doc SenePay prévoit deux formats d'erreur
+            const errorMsg = data.message || data.error || 'Erreur lors de la création de la session SenePay';
+            return res.status(response.status).json({ error: errorMsg });
         }
 
         return res.status(200).json({ checkoutUrl: data.checkoutUrl });
@@ -72,4 +80,4 @@ export default async function handler(req, res) {
         console.error('Erreur serveur:', error);
         return res.status(500).json({ error: 'Erreur interne du serveur' });
     }
-}
+};

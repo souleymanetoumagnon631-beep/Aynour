@@ -40,7 +40,25 @@ module.exports = async function handler(req, res) {
         if (payload.event === 'checkout.session.completed' && payload.status === 'Complete') {
             const { orderReference, amount, transactionId, customer_phone, metadata } = payload;
 
-            await fetch(`${process.env.SUPABASE_URL}/rest/v1/orders`, {
+            // Vérifier si la commande existe déjà (idempotence)
+            const checkRes = await fetch(
+                `${process.env.SUPABASE_URL}/rest/v1/orders?order_reference=eq.${orderReference}&select=id`,
+                {
+                    headers: {
+                        'apikey': process.env.SUPABASE_KEY,
+                        'Authorization': `Bearer ${process.env.SUPABASE_KEY}`
+                    }
+                }
+            );
+            const existing = await checkRes.json();
+
+            if (Array.isArray(existing) && existing.length > 0) {
+                // Commande déjà enregistrée — répondre 200 sans dupliquer
+                console.log(`Commande ${orderReference} déjà existante, ignorée.`);
+                return res.status(200).json({ received: true, duplicate: true });
+            }
+
+            const insertRes = await fetch(`${process.env.SUPABASE_URL}/rest/v1/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,7 +69,7 @@ module.exports = async function handler(req, res) {
                 body: JSON.stringify({
                     order_reference: orderReference,
                     full_name: metadata?.full_name || 'Client',
-                    phone: metadata?.phone || customer_phone,
+                    phone: metadata?.phone || customer_phone || '',
                     address: metadata?.address || 'Non spécifiée',
                     color: metadata?.color || 'Non spécifiée',
                     quantity: Number(metadata?.quantity || 1),
@@ -60,6 +78,15 @@ module.exports = async function handler(req, res) {
                     transaction_id: transactionId
                 })
             });
+
+            if (!insertRes.ok) {
+                const errorText = await insertRes.text();
+                console.error('Erreur Supabase:', insertRes.status, errorText);
+                // Retourner 500 pour que Senepay réessaie le webhook
+                return res.status(500).send('Erreur lors de l\'enregistrement de la commande');
+            }
+
+            console.log(`Commande ${orderReference} enregistrée avec succès.`);
         }
 
         return res.status(200).json({ received: true });
