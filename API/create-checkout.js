@@ -1,59 +1,58 @@
-module.exports = async function handler(req, res) {
-    // Accepter uniquement les requêtes POST
+export default async function handler(req, res) {
+    // S'assurer que seule la méthode POST est acceptée
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Méthode non autorisée' });
     }
 
     try {
-        const { full_name, phone, address, color, quantity } = req.body || {};
+        const { full_name, phone, address, color, quantity } = req.body;
 
         const qty = Number(quantity) || 1;
         const totalAmount = qty * 7000;
+        const orderRef = 'AYN-' + Date.now();
 
-        // Clés API SenePay (Variables d'environnement Vercel)
-        const apiKey = process.env.SENEPAY_API_KEY;
-        const secretKey = process.env.SENEPAY_SECRET_KEY;
+        // Clés SenePay (à récupérer dans les variables d'environnement Vercel ou en dur pour tester)
+        const apiKey = process.env.SENEPAY_API_KEY || 'VOTRE_API_KEY_ICI';
+        const apiSecret = process.env.SENEPAY_API_SECRET || 'VOTRE_API_SECRET_ICI';
 
-        if (!apiKey || !secretKey) {
-            console.error("Clés API SenePay manquantes dans les variables Vercel.");
-            return res.status(500).json({ error: "Configuration serveur incomplète (Clés API manquantes)." });
-        }
-
-        // Appel direct à SenePay
-        const senepayResponse = await fetch('https://api.senepay.com/v1/checkout', {
+        // Appel à l'API SenePay pour créer la session
+        const response = await fetch('https://api.sene-pay.com/api/v1/checkout/sessions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${secretKey}`,
-                'X-API-KEY': apiKey
+                'X-Api-Key': apiKey,
+                'X-Api-Secret': apiSecret,
             },
             body: JSON.stringify({
                 amount: totalAmount,
                 currency: 'XOF',
-                description: `Bracelet Ayat Al-Kursi (${color} x${qty})`,
-                customer: {
-                    name: full_name,
-                    phone: `+223${phone}`,
-                    address: address
-                },
-                return_url: `https://${req.headers.host}/?payment=success`,
-                cancel_url: `https://${req.headers.host}/?payment=cancelled`
+                orderReference: orderRef,
+                description: `Bracelet Ayat Al-Kursi (${color}) x${qty}`,
+                country: 'ML', // Mali
+                metadata: {
+                    customer_name: full_name,
+                    phone: phone,
+                    address: address,
+                    color: color,
+                    quantity: qty
+                }
             })
         });
 
-        const senepayData = await senepayResponse.json();
+        const data = await response.json();
 
-        if (!senepayResponse.ok) {
-            console.error('Erreur SenePay:', senepayData);
-            return res.status(400).json({
-                error: senepayData.message || 'Échec de la création de la session SenePay.'
+        if (!response.ok) {
+            console.error('Erreur SenePay API:', data);
+            return res.status(response.status).json({
+                error: data.message || data.error || 'Erreur lors de l’initialisation SenePay.'
             });
         }
 
-        return res.status(200).json({ checkoutUrl: senepayData.checkout_url || senepayData.url });
+        // Renvoie l'URL de paiement générée par SenePay
+        return res.status(200).json({ checkoutUrl: data.checkoutUrl });
 
     } catch (error) {
-        console.error('Erreur serveur API:', error);
-        return res.status(500).json({ error: 'Erreur interne du serveur lors de la création du paiement.' });
+        console.error('Erreur Serveur Vercel:', error);
+        return res.status(500).json({ error: 'Erreur interne du serveur' });
     }
-};
+}
