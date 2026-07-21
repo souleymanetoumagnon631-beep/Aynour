@@ -1688,83 +1688,48 @@ _Commande reçue via aynour.vercel.app_
     }
 
     // ── SUBMIT AVEC SENEPAY ──
-    let submitting = false;
 
-    async function handleSubmit(e) {
-      // 1. Bloquer impérativement la rechargement de la page HTML
-      if (e) e.preventDefault();
+    document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
 
-      if (submitting) return false;
+      const submitBtn = this.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Redirection vers le paiement...';
 
-      const form = document.getElementById('orderForm');
-      const btn = document.getElementById('submit-btn');
-
-      // Récupération des données du formulaire
-      const fd = new FormData(form);
-      const full_name = fd.get('full_name')?.trim();
-      const phone = fd.get('phone')?.trim();
-      const address = fd.get('address')?.trim();
-      const color = fd.get('color');
-      const qtyInput = fd.get('quantity') || (typeof quantity !== 'undefined' ? quantity : 1);
-
-      if (!full_name || !phone || !address) {
-        if (typeof showToast === 'function') showToast('Veuillez remplir tous les champs.', 'error');
-        return false;
-      }
-
-      submitting = true;
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = 'Redirection vers le paiement…';
-      }
+      const formData = {
+        full_name: document.getElementById('full_name').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        color: document.getElementById('color').value,
+        quantity: document.getElementById('quantity').value
+      };
 
       try {
-        // 2. Envoi des données à Vercel
         const res = await fetch('/api/create-checkout', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            full_name,
-            phone,
-            address,
-            color,
-            quantity: Number(qtyInput)
-          })
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
         });
-
-        const contentType = res.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-          const rawText = await res.text();
-          console.error("Réponse du serveur :", rawText);
-          throw new Error("Erreur serveur lors de la création du paiement.");
-        }
 
         const data = await res.json();
 
-        if (!res.ok || !data.checkoutUrl) {
-          throw new Error(data.error || 'Impossible d\'initialiser le paiement SenePay.');
-        }
-
-        // 3. Redirection vers SenePay
-        window.location.href = data.checkoutUrl;
-
-      } catch (err) {
-        console.error('Erreur submission:', err);
-        if (typeof showToast === 'function') {
-          showToast(err.message || 'Erreur lors du paiement.', 'error');
+        if (res.ok && data.checkoutUrl) {
+          window.location.href = data.checkoutUrl; // Redirection SenePay
         } else {
-          alert(err.message || 'Erreur lors du paiement.');
+          alert('Erreur: ' + (data.error || 'Impossible d’initialiser le paiement'));
+          submitBtn.disabled = false;
+          submitBtn.innerText = 'Commander';
         }
-        if (btn) {
-          btn.disabled = false;
-          btn.textContent = 'Finaliser la commande';
-        }
-      } finally {
-        submitting = false;
+      } catch (err) {
+        console.error(err);
+        alert('Erreur réseau ou serveur inaccessible.');
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Commander';
       }
+    });
 
-      return false;
-    }
   </script>
 </body>
 
