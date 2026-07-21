@@ -1,4 +1,5 @@
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
+    // Accepter uniquement les requêtes POST
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Méthode non autorisée' });
     }
@@ -6,56 +7,55 @@ module.exports = async function handler(req, res) {
     try {
         const { full_name, phone, address, color, quantity } = req.body;
 
-        const amount = Number(quantity) * 7000;
-        const orderReference = 'AYN-' + Date.now();
+        // Calcul du montant total (ex: 7000 FCFA par unité)
+        const qty = Number(quantity) || 1;
+        const totalAmount = qty * 7000;
 
-        const protocol = req.headers['x-forwarded-proto'] || 'https';
-        const host = req.headers.host;
-        const baseUrl = `${protocol}://${host}`;
+        // Clés SenePay définies dans les variables d'environnement Vercel
+        const apiKey = process.env.SENEPAY_API_KEY;
+        const secretKey = process.env.SENEPAY_SECRET_KEY;
 
-        const senepayRes = await fetch('https://api.sene-pay.com/api/v1/checkout/sessions', {
+        if (!apiKey || !secretKey) {
+            console.error("Clés API SenePay manquantes dans les variables d'environnement Vercel.");
+            return res.status(500).json({ error: "Configuration serveur incomplète (Clés API manquantes)." });
+        }
+
+        // Appel direct à l'API SenePay
+        const senepayResponse = await fetch('https://api.senepay.com/v1/checkout', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Api-Key': process.env.SENEPAY_API_KEY,
-                'X-Api-Secret': process.env.SENEPAY_API_SECRET
+                'Authorization': `Bearer ${secretKey}`,
+                'X-API-KEY': apiKey
             },
             body: JSON.stringify({
-                amount: amount,
+                amount: totalAmount,
                 currency: 'XOF',
-                orderReference: orderReference,
-                description: `Achat Bracelet Ayat Al-Kursi (${color} x${quantity})`,
-                returnUrl: `${baseUrl}/?payment=success&ref=${orderReference}`,
-                cancelUrl: `${baseUrl}/?payment=cancelled`,
-                webhookUrl: `${baseUrl}/api/webhook`,
-                country: 'ML',
-                expiresInMinutes: 30,
-                metadata: {
-                    full_name,
-                    phone,
-                    address,
-                    color,
-                    quantity: String(quantity)
-                }
+                description: `Bracelet Ayat Al-Kursi (${color} x${qty})`,
+                customer: {
+                    name: full_name,
+                    phone: `+223${phone}`,
+                    address: address
+                },
+                return_url: `https://${req.headers.host}/?payment=success`,
+                cancel_url: `https://${req.headers.host}/?payment=cancelled`
             })
         });
 
-        const data = await senepayRes.json();
+        const senepayData = await senepayResponse.json();
 
-        if (!senepayRes.ok) {
-            return res.status(senepayRes.status).json({
-                error: data.message || data.error || 'Erreur lors de la création de la session SenePay'
+        if (!senepayResponse.ok) {
+            console.error('Erreur retournée par SenePay:', senepayData);
+            return res.status(400).json({
+                error: senepayData.message || 'Échec de la création de la session SenePay.'
             });
         }
 
-        return res.status(200).json({
-            checkoutUrl: data.checkoutUrl,
-            sessionToken: data.sessionToken,
-            orderReference: orderReference
-        });
+        // Renvoie l'URL de paiement générée au navigateur
+        return res.status(200).json({ checkoutUrl: senepayData.checkout_url || senepayData.url });
 
     } catch (error) {
-        console.error('Erreur SenePay Session:', error);
-        return res.status(500).json({ error: 'Erreur interne du serveur' });
+        console.error('Erreur serveur API:', error);
+        return res.status(500).json({ error: 'Erreur interne du serveur lors de la création du paiement.' });
     }
-};
+}
