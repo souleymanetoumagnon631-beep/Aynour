@@ -1679,21 +1679,24 @@ _Commande reçue via aynour.vercel.app_
     if (heroEl) observer.observe(heroEl);
 
     // ── INITIATE CHECKOUT ──
-    document.getElementById('order-form').addEventListener('focusin', function handler() {
-      track('InitiateCheckout', { value: 7000, currency: 'XOF' });
-      this.removeEventListener('focusin', handler);
-    });
+    const orderFormEl = document.getElementById('orderForm');
+    if (orderFormEl) {
+      orderFormEl.addEventListener('focusin', function handler() {
+        track('InitiateCheckout', { value: 7000, currency: 'XOF' });
+        this.removeEventListener('focusin', handler);
+      });
+    }
 
     // ── SUBMIT AVEC SENEPAY ──
     let submitting = false;
 
     async function handleSubmit(e) {
-      // 1. Empêcher le rechargement de la page et l'apparition des params dans l'URL
-      e.preventDefault();
+      // 1. Bloquer impérativement la rechargement de la page HTML
+      if (e) e.preventDefault();
 
-      if (submitting) return;
+      if (submitting) return false;
 
-      const form = e.target;
+      const form = document.getElementById('orderForm');
       const btn = document.getElementById('submit-btn');
 
       // Récupération des données du formulaire
@@ -1702,12 +1705,11 @@ _Commande reçue via aynour.vercel.app_
       const phone = fd.get('phone')?.trim();
       const address = fd.get('address')?.trim();
       const color = fd.get('color');
-      // Récupérer la quantité (ou mettre 1 par défaut)
       const qtyInput = fd.get('quantity') || (typeof quantity !== 'undefined' ? quantity : 1);
 
       if (!full_name || !phone || !address) {
         if (typeof showToast === 'function') showToast('Veuillez remplir tous les champs.', 'error');
-        return;
+        return false;
       }
 
       submitting = true;
@@ -1717,7 +1719,7 @@ _Commande reçue via aynour.vercel.app_
       }
 
       try {
-        // 2. Appel de la fonction Serverless Vercel
+        // 2. Envoi des données à Vercel
         const res = await fetch('/api/create-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1730,7 +1732,6 @@ _Commande reçue via aynour.vercel.app_
           })
         });
 
-        // Sécurité : vérifier si la réponse est bien du JSON
         const contentType = res.headers.get("content-type");
         if (!contentType || !contentType.includes("application/json")) {
           const rawText = await res.text();
@@ -1744,7 +1745,7 @@ _Commande reçue via aynour.vercel.app_
           throw new Error(data.error || 'Impossible d\'initialiser le paiement SenePay.');
         }
 
-        // 3. Redirection vers la page de paiement SenePay
+        // 3. Redirection vers SenePay
         window.location.href = data.checkoutUrl;
 
       } catch (err) {
@@ -1761,6 +1762,8 @@ _Commande reçue via aynour.vercel.app_
       } finally {
         submitting = false;
       }
+
+      return false;
     }
   </script>
 </body>
