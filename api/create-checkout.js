@@ -28,15 +28,17 @@ module.exports = async function handler(req, res) {
         const totalAmount = qty * 7000;
         const orderRef = 'AYN-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
 
-        // Clés d'environnement Vercel
-        const apiKey = process.env.SENEPAY_API_KEY;
-        const apiSecret = process.env.SENEPAY_API_SECRET;
-        const supabaseUrl = process.env.SUPABASE_URL || 'https://qjjxnrdafphwvkgaxayy.supabase.co';
-        const supabaseKey = process.env.SUPABASE_KEY;
+        // Récupération des clés d'environnement Vercel
+        const apiKey = (process.env.SENEPAY_API_KEY || '').trim();
+        const apiSecret = (process.env.SENEPAY_API_SECRET || '').trim();
+        const supabaseUrl = (process.env.SUPABASE_URL || 'https://qjjxnrdafphwvkgaxayy.supabase.co').trim();
+        const supabaseKey = (process.env.SUPABASE_KEY || '').trim();
 
         if (!apiKey || !apiSecret) {
-            console.error('Clés SenePay manquantes dans process.env');
-            return res.status(500).json({ error: 'Configuration SenePay manquante sur le serveur' });
+            console.error('Clés SenePay manquantes dans process.env (SENEPAY_API_KEY ou SENEPAY_API_SECRET)');
+            return res.status(500).json({
+                error: 'Clés API SenePay non configurées. Veuillez ajouter SENEPAY_API_KEY et SENEPAY_API_SECRET dans Vercel Environment Variables.'
+            });
         }
 
         // Construction dynamique de l'URL de base pour les callbacks
@@ -45,7 +47,7 @@ module.exports = async function handler(req, res) {
         const host = rawHost.replace(/^https?:\/\//, '');
         const baseUrl = `${proto}://${host}`;
 
-        // 2. Enregistrer la commande initiale en statut 'pending' dans Supabase (si Supabase est configuré)
+        // 2. Sauvegarde de la commande initiale en statut 'pending' dans Supabase
         if (supabaseUrl && supabaseKey) {
             try {
                 const sbRes = await fetch(`${supabaseUrl}/rest/v1/orders`, {
@@ -70,20 +72,19 @@ module.exports = async function handler(req, res) {
                 });
                 if (!sbRes.ok) {
                     const sbErr = await sbRes.text();
-                    console.error('Erreur sauvegarde Supabase commande:', sbErr);
+                    console.error('Supabase save order error:', sbErr);
                 }
             } catch (sbError) {
-                console.error('Exception Supabase commande:', sbError);
+                console.error('Supabase exception:', sbError);
             }
         }
 
-        // 3. Création de la session de paiement SenePay
+        // 3. Payload de création de session SenePay
         const senepayPayload = {
             amount: totalAmount,
             currency: 'XOF',
             orderReference: orderRef,
             description: `Bracelet Ayat Al-Kursi (${color || 'Argent'}) x${qty}`,
-            country: 'ML', // Mali
             returnUrl: `${baseUrl}/?success=true&order=${orderRef}`,
             cancelUrl: `${baseUrl}/?cancel=true&order=${orderRef}`,
             webhookUrl: `${baseUrl}/api/webhook`,
@@ -96,6 +97,7 @@ module.exports = async function handler(req, res) {
             }
         };
 
+        // Envoi de la requête à SenePay
         const response = await fetch('https://api.sene-pay.com/api/v1/checkout/sessions', {
             method: 'POST',
             headers: {
@@ -106,18 +108,49 @@ module.exports = async function handler(req, res) {
             body: JSON.stringify(senepayPayload)
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            console.error('Erreur API SenePay:', data);
-            const errorMsg = data.message || data.error || (data.code ? `Erreur SenePay: ${data.code}` : 'Échec de création de la session SenePay');
-            return res.status(response.status || 400).json({ error: errorMsg });
+        // Lecture sécurisée de la réponse (Text puis JSON)
+        const rawResponseText = await response.text();
+        let data = {};
+        try {
+            data = JSON.parse(rawResponseText);
+        } catch (e) {
+            data = { rawText: rawResponseText };
         }
 
-        const checkoutUrl = data.checkoutUrl;
-        const sessionToken = data.sessionToken;
+        if (!response.ok) {
+            console.error(`Erreur SenePay HTTP ${response.status}:`, data);
 
-        // 4. Mettre à jour Supabase avec le session_token
+            let detailedError = data.message || data.Message || data.error || data.detail || data.title;
+            if (!detailedError && data.errors) {
+                if (typeof data.errors === 'object') {
+                    detailedError = Object.entries(data.errors)
+                        .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`)
+                        .join(' | ');
+                } else {
+                    detailedError = String(data.errors);
+                }
+            }
+            if (!detailedError && data.code) {
+                detailedError = `Code SenePay: ${data.code}`;
+            }
+            if (!detailedError) {
+                detailedError = data.rawText ? data.rawText.substring(0, 200) : JSON.stringify(data);
+            }
+
+            return res.status(response.status || 400).json({
+                error: `SenePay (HTTP ${response.status}): ${detailedError}`
+            });
+        }
+
+        const checkoutUrl = data.checkoutUrl || data.redirectUrl || data.checkout_url;
+        const sessionToken = data.sessionToken || data.session_token;
+
+        if (!checkoutUrl) {
+            console.error('checkoutUrl manquant dans la réponse SenePay:', data);
+            return res.status(500).json({ error: 'URL de paiement non renvoyée par SenePay' });
+        }
+
+        // 4. Mettre à jour Supabase avec le sessionToken
         if (supabaseUrl && supabaseKey && sessionToken) {
             try {
                 await fetch(`${supabaseUrl}/rest/v1/orders?order_reference=eq.${encodeURIComponent(orderRef)}`, {
@@ -133,7 +166,7 @@ module.exports = async function handler(req, res) {
                     })
                 });
             } catch (err) {
-                console.error('Erreur mise à jour session_token Supabase:', err);
+                console.error('Mise à jour sessionToken Supabase error:', err);
             }
         }
 
