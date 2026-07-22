@@ -80,6 +80,7 @@ module.exports = async function handler(req, res) {
         }
 
         // 3. Payload de création de session SenePay
+        // NOTE IMPORTANTE : Les valeurs de l'objet metadata DOIVENT TOUTES ÊTRE DES CHAINES (String) pour l'API SenePay (C# Dictionary<string, string>)
         const senepayPayload = {
             amount: totalAmount,
             currency: 'XOF',
@@ -89,11 +90,11 @@ module.exports = async function handler(req, res) {
             cancelUrl: `${baseUrl}/?cancel=true&order=${orderRef}`,
             webhookUrl: `${baseUrl}/api/webhook`,
             metadata: {
-                full_name: full_name,
-                phone: phone,
-                address: address,
-                color: color || 'Argent',
-                quantity: qty
+                full_name: String(full_name || ''),
+                phone: String(phone || ''),
+                address: String(address || ''),
+                color: String(color || 'Argent'),
+                quantity: String(qty)
             }
         };
 
