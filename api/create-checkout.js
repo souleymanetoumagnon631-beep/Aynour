@@ -95,6 +95,7 @@ module.exports = async function handler(req, res) {
             amount: totalAmount,
             currency: 'XOF',
             orderReference: orderRef,
+            country: 'ML',
             description: `Bracelet Ayat Al-Kursi (${color || 'Argent'}) x${qty}`,
             returnUrl: `${baseUrl}/?success=true&order=${orderRef}`,
             cancelUrl: `${baseUrl}/?cancel=true&order=${orderRef}`,
