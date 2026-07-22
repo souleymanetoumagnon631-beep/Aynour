@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aynour — Bracelet Ayat Al-Kursi</title>
   <meta name="description"
-    content="Bracelet Ayat Al-Kursi en acier inoxydable 316L. Gravure Coran authentique. Paiement à la livraison à Bamako." />
+    content="Bracelet Ayat Al-Kursi en acier inoxydable 316L. Gravure Coran authentique. Paiement 100% sécurisé via Orange Money et Moov Money." />
   <meta property="og:title" content="Aynour — Bracelet Ayat Al-Kursi" />
   <meta property="og:description"
     content="Portez la parole d'Allah sur votre poignet. Livraison gratuite à Bamako 🇲🇱." />
@@ -1110,7 +1110,7 @@
 
   <!-- ANNOUNCEMENT -->
   <div class="announcement">
-    🚚 Livraison gratuite à Bamako — Paiement à la livraison — Commandez avant 20h
+    🚚 Livraison gratuite à Bamako — Paiement par Orange Money & Moov Money — Commandez avant 20h
   </div>
 
   <!-- NAVBAR -->
@@ -1148,7 +1148,7 @@
         </div>
 
         <div class="hero-trust">
-          <div class="trust-item"><span class="trust-dot"></span> Paiement à la livraison</div>
+          <div class="trust-item"><span class="trust-dot"></span> Paiement Orange & Moov Money</div>
           <div class="trust-item"><span class="trust-dot"></span> Livraison gratuite Bamako</div>
         </div>
       </div>
@@ -1342,7 +1342,7 @@
         <div class="text-center">
           <span class="section-label">✦ Commande</span>
           <h2 class="section-title">Passez votre <span class="text-gold-gradient">commande</span></h2>
-          <p style="color:var(--text-muted);margin-top:8px">Paiement à la livraison — aucune avance requise.</p>
+          <p style="color:var(--text-muted);margin-top:8px">Paiement sécurisé par Orange Money & Moov Money.</p>
         </div>
         <div class="form-card">
           <form id="orderForm" onsubmit="handleSubmit(event)">
@@ -1395,13 +1395,26 @@
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;margin-top:12px">
               <button type="submit" class="submit-btn" id="submit-btn">
-                💳 Commander et payer rapidement en ligne
+                💳 Payer en ligne (Orange & Moov Money)
               </button>
+              <!-- Bloc de réassurance avec logos réels -->
+              <div
+                style="display:flex;align-items:center;justify-content:center;gap:12px;margin:8px 0;background:rgba(255,255,255,0.03);padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.05)">
+                <span
+                  style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em">Paiement
+                  100% Sécurisé :</span>
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/40px-Orange_logo.svg.png"
+                  alt="Orange Money" style="height:18px;border-radius:4px" />
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Moov_Africa_logo.svg/60px-Moov_Africa_logo.svg.png"
+                  alt="Moov Money" style="height:18px;border-radius:4px" />
+              </div>
               <button type="button" class="btn-whatsapp-order" id="whatsapp-btn" onclick="handleWhatsAppOrder()">
                 💬 Commander sur WhatsApp
               </button>
             </div>
-            <p class="form-note">🔒 Paiement uniquement à la réception de votre colis</p>
+            <p class="form-note">🔒 Paiement 100% sécurisé via Mobile Money</p>
             <div class="form-guarantee">
               <div class="guarantee-item"><span class="guarantee-icon">✓</span> Livraison gratuite</div>
               <div class="guarantee-item"><span class="guarantee-icon">✓</span> Satisfait ou remboursé</div>
@@ -1445,8 +1458,8 @@
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFaq(this)">Comment fonctionne le paiement ?<span
               class="faq-icon">+</span></button>
-          <div class="faq-a">Vous payez uniquement à la livraison, en espèces, après avoir reçu et vérifié votre
-            bracelet. Aucune avance, aucun risque.</div>
+          <div class="faq-a">Le paiement est entièrement sécurisé et s'effectue en ligne au moment de la commande via
+            Orange Money ou Moov Money. Simple, rapide et 100% sécurisé.</div>
         </div>
       </div>
     </section>
@@ -1492,7 +1505,7 @@
             <line x1="12" y1="1" x2="12" y2="23" />
             <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
           </svg>
-          Paiement à la livraison
+          Paiement par Orange & Moov Money
         </div>
         <div class="confirmation-detail">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"
@@ -1652,7 +1665,7 @@ _Commande reçue via aynour.vercel.app_
       document.getElementById('quantity').value = quantity;
       const total = (quantity * 7000).toLocaleString('fr-FR');
       document.getElementById('total-display').textContent = total + ' FCFA';
-      document.getElementById('submit-btn').textContent = 'Commander — ' + total + ' FCFA à la livraison';
+      document.getElementById('submit-btn').textContent = 'Payer — ' + total + ' FCFA par Mobile Money';
     }
 
     // ── COUNTDOWN ──
