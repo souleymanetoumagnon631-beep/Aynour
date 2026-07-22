@@ -1727,7 +1727,12 @@ _Commande reçue via aynour.vercel.app_
           const mainEl = document.getElementById('main-content');
           if (mainEl) mainEl.style.display = 'none';
         }
-        track('Purchase', { value: (quantity || 1) * 7000, currency: 'XOF' });
+
+        const total = (quantity || 1) * 7000;
+        track('Purchase', { value: total, currency: 'XOF' });
+
+        // CAPI Purchase (au cas où il n'aurait pas été reçu avant redirection)
+        sendCAPI('Purchase', '', '', total, 'CB-SP-' + Date.now());
 
         // Nettoyer l'URL
         window.history.replaceState({}, document.title, window.location.pathname);
@@ -1789,7 +1794,21 @@ _Commande reçue via aynour.vercel.app_
         const data = await response.json();
 
         if (response.ok && data.checkoutUrl) {
+          const total = qty * 7000;
+          const eventId = 'AYN-SP-' + Date.now();
+
+          // Pixel Meta — ajout au panier + achat
+          track('AddToCart', { value: total, currency: 'XOF', content_name: 'Bracelet Ayat Al-Kursi', content_type: 'product', num_items: qty });
+          track('Purchase', { value: total, currency: 'XOF' });
+
+          // CAPI Meta — ajout au panier + achat
+          sendCAPI('AddToCart', phone, fullName, total, eventId);
+          sendCAPI('Purchase', phone, fullName, total, eventId + '_purchase');
+
           showToast('Redirection vers la page de paiement SenePay...');
+
+          // Petit délai pour laisser les pixels partir avant redirection
+          await new Promise(r => setTimeout(r, 300));
           window.location.href = data.checkoutUrl;
         } else {
           console.error('Erreur checkout SenePay:', data);
