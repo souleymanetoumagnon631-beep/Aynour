@@ -1810,7 +1810,7 @@ _Commande reçue via aynour.vercel.app_
     }
 
     // ── COMMANDE SUR WHATSAPP ──
-    async function handleWhatsAppOrder() {
+    function handleWhatsAppOrder() {
       const fullName = document.getElementById('full_name')?.value?.trim();
       const phone = document.getElementById('phone')?.value?.trim();
       const address = document.getElementById('address')?.value?.trim();
@@ -1823,32 +1823,15 @@ _Commande reçue via aynour.vercel.app_
       }
 
       const total = qty * 7000;
-      const orderRef = 'AYN-WA-' + Date.now();
 
-      // 1. Enregistrement Supabase
-      try {
-        await insertOrder({
-          order_reference: orderRef,
-          full_name: fullName,
-          phone: phone,
-          address: address,
-          color: color,
-          quantity: qty,
-          total_amount: total,
-          currency: 'XOF',
-          status: 'whatsapp_pending'
-        });
-      } catch (e) {
-        console.warn('Supabase WA:', e);
-      }
+      // Pixel Meta — considéré comme un ajout au panier
+      track('AddToCart', { value: total, currency: 'XOF', content_name: 'Bracelet Ayat Al-Kursi', content_type: 'product', num_items: qty });
 
-      // 2. Notification Telegram Bot instantanée
-      await sendTelegram(fullName, phone, address, color, qty, total);
+      // CAPI Meta — ajout au panier
+      const eventId = 'AYN-WA-' + Date.now();
+      sendCAPI('AddToCart', phone, fullName, total, eventId);
 
-      // 3. Pixel Meta Track
-      track('InitiateCheckout', { value: total, currency: 'XOF' });
-
-      // 4. Construction message WhatsApp & Ouverture
+      // Construction du message WhatsApp prérempli
       const text = `Assalamu alaykum ! Je souhaite passer commande sur Aynour Shop :\n\n` +
         `🛍️ *Produit :* Bracelet Ayat Al-Kursi\n` +
         `🎨 *Couleur :* ${color}\n` +
@@ -1856,20 +1839,10 @@ _Commande reçue via aynour.vercel.app_
         `💰 *Total :* ${total.toLocaleString('fr-FR')} FCFA\n\n` +
         `👤 *Nom :* ${fullName}\n` +
         `📞 *Téléphone :* +223 ${phone}\n` +
-        `📍 *Adresse :* ${address}\n` +
-        `💳 *Réf :* ${orderRef}`;
+        `📍 *Adresse :* ${address}`;
 
       const waUrl = `https://wa.me/22395013281?text=${encodeURIComponent(text)}`;
       window.open(waUrl, '_blank');
-
-      // 5. Affichage modal de confirmation
-      showToast('Redirection vers WhatsApp...');
-      const confirmEl = document.getElementById('confirmation');
-      if (confirmEl) {
-        confirmEl.classList.add('show');
-        const mainEl = document.getElementById('main-content');
-        if (mainEl) mainEl.style.display = 'none';
-      }
     }
   </script>
 </body>
