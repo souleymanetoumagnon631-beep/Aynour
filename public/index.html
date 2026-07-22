@@ -1409,12 +1409,23 @@
                   </svg>Paiement 100% Sécurisé :
                 </span>
                 <div style="display:flex;align-items:center;gap:10px">
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/200px-Orange_logo.svg.png"
-                    alt="Orange Money" style="height:22px;width:22px;object-fit:contain;border-radius:4px" />
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Moov_Africa_logo.svg/320px-Moov_Africa_logo.svg.png"
-                    alt="Moov Money" style="height:22px;object-fit:contain;border-radius:4px" />
+                  <!-- Orange Money (Inline Vector SVG) -->
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    style="border-radius:4px;box-shadow:0 2px 6px rgba(255,102,0,0.15);flex-shrink:0">
+                    <rect width="24" height="24" fill="#FF6600" />
+                    <text x="2" y="15" fill="white" font-family="Helvetica, Arial, sans-serif" font-weight="bold"
+                      font-size="7.5px" letter-spacing="-0.3px">orange</text>
+                  </svg>
+                  <!-- Moov Money (Inline Vector SVG) -->
+                  <svg width="55" height="24" viewBox="0 0 55 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    style="border-radius:4px;box-shadow:0 2px 6px rgba(0,85,165,0.15);flex-shrink:0">
+                    <rect width="55" height="24" fill="#0055A5" />
+                    <text x="4" y="14" fill="#FFFFFF" font-family="'Inter', Helvetica, sans-serif" font-weight="900"
+                      font-size="10px" letter-spacing="-0.3px">Moov</text>
+                    <text x="31" y="14" fill="#FF6600" font-family="Helvetica, Arial, sans-serif" font-weight="bold"
+                      font-size="7px">Africa</text>
+                    <path d="M4 18C15 18 25 19 51 18" stroke="#FF6600" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
                 </div>
               </div>
               <button type="button" class="btn-whatsapp-order" id="whatsapp-btn" onclick="handleWhatsAppOrder()">
