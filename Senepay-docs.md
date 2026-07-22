@@ -1,3 +1,14 @@
+Voici la documentation complète de l'API Sene-Pay (agrégateur de paiement mobile money pour l'Afrique, 16 pays, payin + payout). Aide-moi à intégrer cette API dans mon projet.
+
+Conventions importantes :
+- L'API Checkout (Payin) utilise camelCase pour les paramètres et la réponse.
+- L'API Payout utilise snake_case pour les paramètres et la réponse, codes opérateurs en minuscules sans underscore (wave, orange, mtn, moov, free, emoney, tmoney, airtel, mpesa, wligdicash, celtiis, coris, afrimoney, vodacom, amanata, nita, zamani).
+- Les webhooks sont signés HMAC-SHA256 avec un webhookSigningSecret dédié (préfixé whsec_).
+
+La documentation suit ci-dessous :
+
+---
+
 # Documentation API SenePay
 
 Intégrez facilement les paiements mobile money (Wave, Orange Money, Free Money, MTN, Moov, etc.) dans votre site, application mobile ou plateforme. 16 pays africains, marketplace, remboursements, et envois mass-payouts.

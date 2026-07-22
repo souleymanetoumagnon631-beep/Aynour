@@ -1687,22 +1687,71 @@ _Commande reçue via aynour.vercel.app_
       });
     }
 
+    // ── GESTION RETOUR SENEPAY (CALLBACKS) ──
+    window.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isSuccess = urlParams.get('success') === 'true';
+      const isCancel = urlParams.get('cancel') === 'true';
+      const orderRef = urlParams.get('order');
+
+      if (isSuccess) {
+        showToast('Paiement effectué avec succès ! Merci pour votre commande.');
+        const confirmEl = document.getElementById('confirmation');
+        if (confirmEl) {
+          confirmEl.classList.add('show');
+          const mainEl = document.getElementById('main-content');
+          if (mainEl) mainEl.style.display = 'none';
+        }
+        track('Purchase', { value: (quantity || 1) * 7000, currency: 'XOF' });
+
+        // Nettoyer l'URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        // Vérification du statut de la commande en arrière-plan
+        if (orderRef) {
+          try {
+            const vRes = await fetch(`/api/verify-order?orderReference=${encodeURIComponent(orderRef)}`);
+            const vData = await vRes.json();
+            console.log('Statut commande vérifié:', vData);
+          } catch (e) {
+            console.warn('Vérification statut:', e);
+          }
+        }
+      } else if (isCancel) {
+        showToast('Le paiement SenePay a été annulé.', 'error');
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
+
     // ── SUBMIT AVEC SENEPAY ──
     async function handleSubmit(e) {
       e.preventDefault();
 
+      const fullName = document.getElementById('full_name')?.value?.trim();
+      const phone = document.getElementById('phone')?.value?.trim();
+      const address = document.getElementById('address')?.value?.trim();
+      const color = document.getElementById('color')?.value || 'Argent';
+      const qty = parseInt(document.getElementById('quantity')?.value) || 1;
+
+      if (!fullName || !phone || !address) {
+        showToast('Veuillez remplir tous les champs obligatoires.', 'error');
+        return;
+      }
+
       const submitBtn = document.getElementById('submit-btn');
+      const originalText = submitBtn ? submitBtn.innerText : 'Finaliser la commande';
+
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerText = 'Redirection...';
+        submitBtn.innerText = 'Redirection vers SenePay...';
       }
 
       const formData = {
-        full_name: document.getElementById('full_name')?.value || '',
-        phone: document.getElementById('phone')?.value || '',
-        address: document.getElementById('address')?.value || '',
-        color: document.getElementById('color')?.value || 'Argent',
-        quantity: parseInt(document.getElementById('quantity')?.value) || 1
+        full_name: fullName,
+        phone: phone,
+        address: address,
+        color: color,
+        quantity: qty
       };
 
       try {
@@ -1715,25 +1764,25 @@ _Commande reçue via aynour.vercel.app_
         const data = await response.json();
 
         if (response.ok && data.checkoutUrl) {
-          fbq('track', 'Purchase', { value: quantity * 7000, currency: 'XOF' });
+          showToast('Redirection vers la page de paiement SenePay...');
           window.location.href = data.checkoutUrl;
         } else {
-          alert('Erreur : ' + (data.error || 'Impossible d\'initialiser le paiement'));
+          console.error('Erreur checkout SenePay:', data);
+          alert('Erreur de paiement : ' + (data.error || 'Impossible d\'initialiser la session SenePay'));
           if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.innerText = 'Finaliser la commande';
+            submitBtn.innerText = originalText;
           }
         }
       } catch (err) {
-        console.error('Erreur JS:', err);
-        alert('Une erreur réseau est survenue.');
+        console.error('Erreur JS checkout:', err);
+        alert('Erreur réseau. Veuillez vérifier votre connexion.');
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerText = 'Finaliser la commande';
+          submitBtn.innerText = originalText;
         }
       }
     }
-
   </script>
 </body>
 
