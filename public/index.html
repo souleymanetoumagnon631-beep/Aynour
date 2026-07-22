@@ -768,6 +768,32 @@
       transform: none;
     }
 
+    .btn-whatsapp-order {
+      width: 100%;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: #ffffff;
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      padding: 18px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.25);
+      margin-top: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-whatsapp-order:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(37, 211, 102, 0.35);
+    }
+
     .form-note {
       text-align: center;
       font-size: 12px;
@@ -1367,9 +1393,14 @@
                 <input type="hidden" name="quantity" id="quantity" value="1" />
               </div>
             </div>
-            <button type="submit" class="submit-btn" id="submit-btn">
-              Finaliser la commande
-            </button>
+            <div style="display:flex;flex-direction:column;gap:4px;margin-top:12px">
+              <button type="submit" class="submit-btn" id="submit-btn">
+                💳 Commander et payer rapidement en ligne
+              </button>
+              <button type="button" class="btn-whatsapp-order" id="whatsapp-btn" onclick="handleWhatsAppOrder()">
+                💬 Commander sur WhatsApp
+              </button>
+            </div>
             <p class="form-note">🔒 Paiement uniquement à la réception de votre colis</p>
             <div class="form-guarantee">
               <div class="guarantee-item"><span class="guarantee-icon">✓</span> Livraison gratuite</div>
@@ -1493,12 +1524,6 @@
 
   <!-- TOAST -->
   <div class="toast" id="toast"></div>
-
-  <!-- WHATSAPP FLOAT -->
-  <a href="https://wa.me/22395013281?text=Assalamu%20alaykum%2C%20j%27ai%20une%20question%20sur%20le%20Bracelet%20Ayat%20Al-Kursi."
-    class="whatsapp-float" target="_blank">
-    <span class="whatsapp-icon">💬</span>
-  </a>
   <script>
     // ── SUPABASE CONFIG ──
     const SUPABASE_URL = 'https://qjjxnrdafphwvkgaxayy.supabase.co';
@@ -1781,6 +1806,69 @@ _Commande reçue via aynour.vercel.app_
           submitBtn.disabled = false;
           submitBtn.innerText = originalText;
         }
+      }
+    }
+
+    // ── COMMANDE SUR WHATSAPP ──
+    async function handleWhatsAppOrder() {
+      const fullName = document.getElementById('full_name')?.value?.trim();
+      const phone = document.getElementById('phone')?.value?.trim();
+      const address = document.getElementById('address')?.value?.trim();
+      const color = document.getElementById('color')?.value || 'Argent';
+      const qty = parseInt(document.getElementById('quantity')?.value) || 1;
+
+      if (!fullName || !phone || !address) {
+        showToast('Veuillez remplir votre nom, téléphone et adresse.', 'error');
+        return;
+      }
+
+      const total = qty * 7000;
+      const orderRef = 'AYN-WA-' + Date.now();
+
+      // 1. Enregistrement Supabase
+      try {
+        await insertOrder({
+          order_reference: orderRef,
+          full_name: fullName,
+          phone: phone,
+          address: address,
+          color: color,
+          quantity: qty,
+          total_amount: total,
+          currency: 'XOF',
+          status: 'whatsapp_pending'
+        });
+      } catch (e) {
+        console.warn('Supabase WA:', e);
+      }
+
+      // 2. Notification Telegram Bot instantanée
+      await sendTelegram(fullName, phone, address, color, qty, total);
+
+      // 3. Pixel Meta Track
+      track('InitiateCheckout', { value: total, currency: 'XOF' });
+
+      // 4. Construction message WhatsApp & Ouverture
+      const text = `Assalamu alaykum ! Je souhaite passer commande sur Aynour Shop :\n\n` +
+        `🛍️ *Produit :* Bracelet Ayat Al-Kursi\n` +
+        `🎨 *Couleur :* ${color}\n` +
+        `📦 *Quantité :* ${qty}\n` +
+        `💰 *Total :* ${total.toLocaleString('fr-FR')} FCFA\n\n` +
+        `👤 *Nom :* ${fullName}\n` +
+        `📞 *Téléphone :* +223 ${phone}\n` +
+        `📍 *Adresse :* ${address}\n` +
+        `💳 *Réf :* ${orderRef}`;
+
+      const waUrl = `https://wa.me/22395013281?text=${encodeURIComponent(text)}`;
+      window.open(waUrl, '_blank');
+
+      // 5. Affichage modal de confirmation
+      showToast('Redirection vers WhatsApp...');
+      const confirmEl = document.getElementById('confirmation');
+      if (confirmEl) {
+        confirmEl.classList.add('show');
+        const mainEl = document.getElementById('main-content');
+        if (mainEl) mainEl.style.display = 'none';
       }
     }
   </script>

@@ -79,8 +79,18 @@ module.exports = async function handler(req, res) {
             }
         }
 
+        // Envoi de la notification Telegram d'initialisation de commande
+        sendTelegramInitiated({
+            orderReference: orderRef,
+            fullName: full_name.trim(),
+            phone: phone.trim(),
+            address: address.trim(),
+            color: color || 'Argent',
+            quantity: qty,
+            totalAmount: totalAmount
+        });
+
         // 3. Payload de création de session SenePay
-        // NOTE IMPORTANTE : Les valeurs de l'objet metadata DOIVENT TOUTES ÊTRE DES CHAINES (String) pour l'API SenePay (C# Dictionary<string, string>)
         const senepayPayload = {
             amount: totalAmount,
             currency: 'XOF',
@@ -109,7 +119,7 @@ module.exports = async function handler(req, res) {
             body: JSON.stringify(senepayPayload)
         });
 
-        // Lecture sécurisée de la réponse (Text puis JSON)
+        // Lecture sécurisée de la réponse
         const rawResponseText = await response.text();
         let data = {};
         try {
@@ -182,3 +192,38 @@ module.exports = async function handler(req, res) {
         return res.status(500).json({ error: 'Erreur interne du serveur: ' + error.message });
     }
 };
+
+async function sendTelegramInitiated(data) {
+    const telegramToken = process.env.TELEGRAM_BOT_TOKEN || '8644277619:AAFKvPn3fRgV6gCyMVUC-ZaPts4hlI4q3e8';
+    const telegramChatId = process.env.TELEGRAM_CHAT_ID || '7148319409';
+
+    if (!telegramToken || !telegramChatId) return;
+
+    const msg = `
+🛍️ *Nouvelle commande (SenePay en cours)* — Aynour
+
+💳 *Réf :* \`${data.orderReference}\`
+👤 *Nom :* ${data.fullName}
+📞 *Téléphone :* +223${data.phone}
+📍 *Adresse :* ${data.address}
+🎨 *Couleur :* ${data.color}
+📦 *Quantité :* ${data.quantity}
+💰 *Total :* ${data.totalAmount.toLocaleString('fr-FR')} FCFA
+
+_Initialisation du paiement SenePay..._
+    `.trim();
+
+    try {
+        await fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: telegramChatId,
+                text: msg,
+                parse_mode: 'Markdown'
+            })
+        });
+    } catch (e) {
+        console.warn('Erreur envoi Telegram initial:', e.message);
+    }
+}
