@@ -1,0 +1,3 @@
+## 2025-02-23 - Accessibility in Single-Page HTML Checkout Forms
+**Learning:** In simple single-file static HTML checkout forms, form inputs and icon-only quantity adjustment buttons often lack explicit label associations and ARIA labels. Using explicit `for` attributes on `<label>` elements and descriptive `aria-label`s on icon buttons vastly improves screen reader usability without altering visual layout or requiring CSS changes.
+**Action:** Always check form controls and custom icon buttons for missing `<label for="...">` associations and `aria-label` attributes when reviewing simple static HTML interfaces.
