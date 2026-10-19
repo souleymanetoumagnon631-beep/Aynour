@@ -60,6 +60,11 @@
       scroll-behavior: smooth;
     }
 
+    :focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+
     body {
       background: var(--black);
       color: var(--white);
@@ -1400,12 +1405,12 @@ Merci de respecter notre travail.</p>
         <div class="form-card">
           <form id="orderForm" onsubmit="handleSubmit(event)">
             <div class="form-group">
-              <label class="form-label">Nom complet</label>
+              <label class="form-label" for="full_name">Nom complet</label>
               <input class="form-input" id="full_name" name="full_name" required minlength="2"
                 placeholder="Ex. Aminata Koné" autocomplete="name" />
             </div>
             <div class="form-group">
-              <label class="form-label">Téléphone</label>
+              <label class="form-label" for="phone">Téléphone</label>
               <div class="phone-wrap">
                 <span class="phone-prefix">+223</span>
                 <input class="form-input" id="phone" name="phone" type="tel" required minlength="6"
@@ -1413,12 +1418,12 @@ Merci de respecter notre travail.</p>
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label">Adresse de livraison</label>
+              <label class="form-label" for="address">Adresse de livraison</label>
               <textarea class="form-input" id="address" name="address" required minlength="4" rows="3"
                 placeholder="Quartier, commune, point de repère" style="resize:none"></textarea>
             </div>
             <div class="form-group">
-              <label class="form-label">Couleur choisie</label>
+              <label class="form-label" for="color">Couleur choisie</label>
               <select class="form-select" name="color" id="color">
                 <option value="Argent">Argent</option>
                 <option value="Or">Or</option>
@@ -1426,13 +1431,13 @@ Merci de respecter notre travail.</p>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Quantité</label>
+              <span class="form-label">Quantité</span>
               <div style="display:flex;align-items:center;gap:16px">
-                <button type="button" onclick="changeQty(-1)"
+                <button type="button" onclick="changeQty(-1)" aria-label="Diminuer la quantité"
                   style="width:40px;height:40px;border-radius:50%;background:var(--gray-2);border:1px solid var(--gray-3);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
                 <span id="qty-display"
                   style="font-family:var(--font-display);font-size:1.4rem;font-weight:300;min-width:24px;text-align:center">1</span>
-                <button type="button" onclick="changeQty(1)"
+                <button type="button" onclick="changeQty(1)" aria-label="Augmenter la quantité"
                   style="width:40px;height:40px;border-radius:50%;background:var(--gray-2);border:1px solid var(--gray-3);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
                 <span style="color:var(--text-muted);font-size:13px">× 7 000 FCFA</span>
               </div>
@@ -1517,30 +1522,30 @@ Merci de respecter notre travail.</p>
       </div>
       <div class="faq-list">
         <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">Est-ce du vrai acier inoxydable ?<span
+          <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">Est-ce du vrai acier inoxydable ?<span
               class="faq-icon">+</span></button>
           <div class="faq-a">Oui, 100%. Acier inoxydable 316L chirurgical. Hypoallergénique, résistant à l'eau et à la
             rouille.</div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">La gravure s'efface-t-elle ?<span
+          <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">La gravure s'efface-t-elle ?<span
               class="faq-icon">+</span></button>
           <div class="faq-a">Non. Gravure laser en profondeur dans le métal. Elle reste nette même après des années
             d'utilisation quotidienne.</div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">Délai de livraison à Bamako ?<span
+          <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">Délai de livraison à Bamako ?<span
               class="faq-icon">+</span></button>
           <div class="faq-a">24 à 48 heures à Bamako. Nous vous appelons pour confirmer avant la livraison.</div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">Puis-je l'offrir en cadeau ?<span
+          <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">Puis-je l'offrir en cadeau ?<span
               class="faq-icon">+</span></button>
           <div class="faq-a">Absolument. Chaque bracelet est livré dans un écrin élégant prêt à offrir — idéal pour
             l'Aïd, un mariage ou un anniversaire.</div>
         </div>
         <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">Comment fonctionne le paiement ?<span
+          <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">Comment fonctionne le paiement ?<span
               class="faq-icon">+</span></button>
           <div class="faq-a">Nous vous proposons deux options de paiement très simples :
             <br>• <strong>Paiement en ligne immédiat :</strong> Payez en toute sécurité via Orange Money ou Moov Money
@@ -1743,8 +1748,15 @@ _Commande reçue via aynour.vercel.app_
     function toggleFaq(btn) {
       const item = btn.parentElement;
       const isOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-      if (!isOpen) item.classList.add('open');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        const qBtn = i.querySelector('.faq-q');
+        if (qBtn) qBtn.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
     }
     let quantity = 1;
     function changeQty(delta) {
