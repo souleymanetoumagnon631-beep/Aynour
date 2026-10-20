@@ -60,6 +60,11 @@
       scroll-behavior: smooth;
     }
 
+    :focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+
     body {
       background: var(--black);
       color: var(--white);
@@ -1184,24 +1189,28 @@
             onclick="switchImg(this,'https://ae-pic-a1.aliexpress-media.com/kf/Sa844f2f582de4a3c9d59154b90bd64c7X.jpg_960x960q75.jpg_.avif')">
             <img
               src="https://ae-pic-a1.aliexpress-media.com/kf/Sa844f2f582de4a3c9d59154b90bd64c7X.jpg_960x960q75.jpg_.avif"
+              alt="Aperçu bracelet Ayat Al-Kursi - Vue principale"
               onerror="this.src=this.src.replace('.avif','.jpg')" />
           </div>
           <div class="thumb"
             onclick="switchImg(this,'https://ae-pic-a1.aliexpress-media.com/kf/Sbd3f4b0b07074bc5b22c597fce5e68d3Z.jpg_960x960q75.jpg_.avif')">
             <img
               src="https://ae-pic-a1.aliexpress-media.com/kf/Sbd3f4b0b07074bc5b22c597fce5e68d3Z.jpg_960x960q75.jpg_.avif"
+              alt="Aperçu bracelet Ayat Al-Kursi - Gros plan de la gravure"
               onerror="this.src=this.src.replace('.avif','.jpg')" />
           </div>
           <div class="thumb"
             onclick="switchImg(this,'https://ae-pic-a1.aliexpress-media.com/kf/S91535e24632941318d37c89e31b32f32L.jpg_960x960q75.jpg_.avif')">
             <img
               src="https://ae-pic-a1.aliexpress-media.com/kf/S91535e24632941318d37c89e31b32f32L.jpg_960x960q75.jpg_.avif"
+              alt="Aperçu bracelet Ayat Al-Kursi - Porté au poignet"
               onerror="this.src=this.src.replace('.avif','.jpg')" />
           </div>
           <div class="thumb"
             onclick="switchImg(this,'https://ae-pic-a1.aliexpress-media.com/kf/S4189b3a0e398430db40e177f1b5a1d91B.jpg_960x960q75.jpg_.avif')">
             <img
               src="https://ae-pic-a1.aliexpress-media.com/kf/S4189b3a0e398430db40e177f1b5a1d91B.jpg_960x960q75.jpg_.avif"
+              alt="Aperçu bracelet Ayat Al-Kursi - Dans son écrin cadeau"
               onerror="this.src=this.src.replace('.avif','.jpg')" />
           </div>
         </div>
@@ -1428,11 +1437,11 @@ Merci de respecter notre travail.</p>
             <div class="form-group">
               <label class="form-label">Quantité</label>
               <div style="display:flex;align-items:center;gap:16px">
-                <button type="button" onclick="changeQty(-1)"
+                <button type="button" onclick="changeQty(-1)" aria-label="Diminuer la quantité"
                   style="width:40px;height:40px;border-radius:50%;background:var(--gray-2);border:1px solid var(--gray-3);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
                 <span id="qty-display"
                   style="font-family:var(--font-display);font-size:1.4rem;font-weight:300;min-width:24px;text-align:center">1</span>
-                <button type="button" onclick="changeQty(1)"
+                <button type="button" onclick="changeQty(1)" aria-label="Augmenter la quantité"
                   style="width:40px;height:40px;border-radius:50%;background:var(--gray-2);border:1px solid var(--gray-3);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
                 <span style="color:var(--text-muted);font-size:13px">× 7 000 FCFA</span>
               </div>
